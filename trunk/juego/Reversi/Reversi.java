@@ -97,9 +97,9 @@ public class Reversi extends _Juego {
 		public Movimiento[] movimientos(Jugador jugador) {
 			// Si el jugador no es el que mueve, o ha terminado la partida,
 			// retorna null.
-			int jugadorHabilitado = tablero >> 18;
+			int jugadorHabilitado = tablero.getJugadorActual();
 			if (!jugador.equals(jugadores[jugadorHabilitado])
-					|| resultado(jugadorHabilitado) != null) {
+					|| resultado(jugadores[jugadorHabilitado]) != null) {
 				return null;
 			}
 			int ocupadas = (tablero & 0x1FF) | ((tablero >> 9) & 0x1FF);
@@ -129,13 +129,15 @@ public class Reversi extends _Juego {
 		}
 
 		private Double resultado(String jugador) {
-			if (empate(tablero)) {
+			if (empate(tablero)) { // empatan
 				return 0.0;
-			}
-			if (gana(tablero, jugador)) {
+			} else if (gana(tablero, jugador)) { // gana jugador
 				return 1.0;
+			} else if(gana(tablero, (jugador.equals(nombreJugadorBlancas) ? nombreJugadorNegras : nombreJugadorBlancas))){ // gana jugador contrario
+				return -1.0;
 			}
-			return -1.0;
+			
+			return null;
 		}
 
 		/**
