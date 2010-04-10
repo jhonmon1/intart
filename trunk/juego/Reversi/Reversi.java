@@ -1,5 +1,8 @@
 package juego.Reversi;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import juegos.Partida;
 import juegos.agentes.*;
 import juegos.base.*;
@@ -91,44 +94,127 @@ public class Reversi extends _Juego {
 		}
 
 		/**
-		 * IMPLEMENTAR!!!!!! NO SE ROBEN LA GUITA Y HAGANLO!!!!
+		 * 
 		 */
 		@Override
-		public Movimiento[] movimientos(Jugador jugador) {
+		public Movimiento[] movimientos(Jugador jugador) 
+		{
 			// Si el jugador no es el que mueve, o ha terminado la partida,
 			// retorna null.
 			int jugadorHabilitado = tablero.getJugadorActual();
-			if (!jugador.equals(jugadores[jugadorHabilitado])
+			if (!jugador.equals(jugadores[jugadorHabilitado]) 
 					|| resultado(jugadores[jugadorHabilitado]) != null) {
 				return null;
 			}
-			int ocupadas = (tablero & 0x1FF) | ((tablero >> 9) & 0x1FF);
-			boolean jueganXs = (tablero & 0x40000) == 0;
-
-			// Cuenta la cantidad de movimientos.
-			int length = 0;
-			int mascara = 1;
-			for (int i = 0; i < 9; i++) {
-				if ((mascara & ocupadas) == 0) {
-					length++;
+			List<Casilla> listaDeFichasEnTablero = tablero.getFichasJugador();
+			List<Casilla> listaDeFichasDondeColocar = tablero.getFichasDondeColocar();
+			
+			Movimiento mov;
+			List<Movimiento> listaMovs = new ArrayList<Movimiento>();
+			for (Casilla casillaColocar : listaDeFichasDondeColocar) 
+			{
+				for (Casilla casillaEnElTablero : listaDeFichasEnTablero) 
+				{
+					if(hayMovimientoEnFila(casillaColocar, casillaEnElTablero) ||
+					   hayMovimientoEnColumna(casillaColocar, casillaEnElTablero) ||
+					   hayMovimientoEnDiagonal(casillaColocar, casillaEnElTablero))
+					{
+						mov = new MovimientoReversi(casillaColocar.fila(), casillaColocar.columna());
+						listaMovs.add(mov);
+					}
 				}
-				mascara = mascara << 1;
 			}
-
+			
 			// Construye el vector de movimientos.
-			Movimiento[] movs = new Movimiento[length];
-			mascara = 1;
-			for (int i = 0, j = 0; i < 9; i++) {
-				if ((mascara & ocupadas) == 0) {
-					movs[j++] = new MovimientoTateti(jueganXs ? mascara
-							: (mascara << 9));
-				}
-				mascara = mascara << 1;
+			Movimiento[] movs = new Movimiento[listaMovs.size()];
+			int count = 0;
+			for (Movimiento movimiento : listaMovs) 
+			{
+				movs[count] = movimiento;
+				count++;
 			}
 			return movs;
 		}
 
-		private Double resultado(String jugador) {
+		private boolean hayMovimientoEnDiagonal(Casilla casillaColocar, Casilla casillaEnElTablero) 
+		{
+			int newFila = 0;
+			int newColumna = 0;
+			
+			for (int i = -8; i <= 8; i++) 
+			{
+				//Diagonal Positiva
+				newFila    = casillaColocar.fila()    - i + 1;
+				newColumna = casillaColocar.columna() + i - 1;
+				
+				if(newFila == casillaEnElTablero.fila() && newColumna == casillaEnElTablero.columna())
+					return true;
+				
+				//Diagonal Negativa
+				newFila    = casillaColocar.fila()    + i + 1;
+				newColumna = casillaColocar.columna() + i + 1;
+				
+				if(newFila == casillaEnElTablero.fila() && newColumna == casillaEnElTablero.columna())
+					return true;
+			}
+			return false;
+		}
+
+		/**
+		 * @param casillaColocar
+		 * @param casillaEnElTablero
+		 * @return true si estan las 2 casillas en la misma columna y puede comer
+		 */
+		private boolean hayMovimientoEnColumna(Casilla casillaColocar, Casilla casillaEnElTablero) 
+		{
+			if(casillaColocar.columna() == casillaEnElTablero.columna())
+			{
+				int fil1, fil2;
+				if(casillaColocar.fila() < casillaEnElTablero.fila()) {
+					fil1 = casillaColocar.fila();
+					fil2 = casillaEnElTablero.fila();
+				} else {
+					fil2 = casillaColocar.fila();
+					fil1 = casillaEnElTablero.fila();
+				}
+				for (int i = fil1 + 1; i < fil2; i++) 
+				{
+					if(tablero.hayFichaAdversario(i, casillaColocar.columna()))
+						return true;
+				}
+			}
+			return false;
+		}
+
+		/**
+		 * @param casillaColocar
+		 * @param casillaEnElTablero
+		 * @return True si las dos casillas estan en la misma fila y puede comer.
+		 */
+		private boolean hayMovimientoEnFila(Casilla casillaColocar, Casilla casillaEnElTablero) 
+		{
+			if(casillaColocar.fila() == casillaEnElTablero.fila())
+			{
+				int col1, col2;
+				if(casillaColocar.columna() < casillaEnElTablero.columna()) {
+					col1 = casillaColocar.columna();
+					col2 = casillaEnElTablero.columna();
+				} else {
+					col2 = casillaColocar.columna();
+					col1 = casillaEnElTablero.columna();
+				}
+				for (int i = col1 + 1; i < col2; i++) 
+				{
+					if(tablero.hayFichaAdversario(casillaColocar.fila(), i))
+						return true;
+				}
+			}
+			return false;
+		}
+
+		
+		private Double resultado(String jugador) 
+		{
 			if (empate(tablero)) { // empatan
 				return 0.0;
 			} else if (gana(tablero, jugador)) { // gana jugador
@@ -201,4 +287,5 @@ public class Reversi extends _Juego {
 		System.out.println(Partida.completa(Reversi.JUEGO, new AgenteConsola(),
 				new AgenteAleatorio()).toString());
 	}
+
 }
