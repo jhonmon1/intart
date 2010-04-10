@@ -17,7 +17,7 @@ public class Reversi extends _Juego {
 	public static String nombreJugadorBlancas = "JugadorBlancas";
 
 	private Reversi() {
-		super("Reversi", nombreJugadorNegras, nombreJugadorBlancas);
+		super("Reversi", "JugadorNegras", "JugadorBlancas");
 	}
 
 	@Override
@@ -50,19 +50,9 @@ public class Reversi extends _Juego {
 	}
 
 	/**
-	 * @param tablero
-	 * @param fila
-	 * @param columna
-	 * @return el contenido de la casilla [fila][columna] del tablero.
-	 */
-	private static final char casilla(Tablero tablero, int fila, int columna) {
-		return tablero.getCasilla(fila, columna);
-	}
-
-	/**
 	 * Clase que representa el Estado del juego Reversi
 	 */
-	private class EstadoReversi implements Estado {
+	public class EstadoReversi implements Estado {
 
 		public final Tablero tablero;
 
@@ -102,6 +92,7 @@ public class Reversi extends _Juego {
 			// Si el jugador no es el que mueve, o ha terminado la partida,
 			// retorna null.
 			int jugadorHabilitado = tablero.getJugadorActual();
+			
 			if (!jugador.equals(jugadores[jugadorHabilitado]) 
 					|| resultado(jugadores[jugadorHabilitado]) != null) {
 				return null;
@@ -115,9 +106,10 @@ public class Reversi extends _Juego {
 			{
 				for (Casilla casillaEnElTablero : listaDeFichasEnTablero) 
 				{
-					if(hayMovimientoEnFila(casillaColocar, casillaEnElTablero) ||
-					   hayMovimientoEnColumna(casillaColocar, casillaEnElTablero) ||
-					   hayMovimientoEnDiagonal(casillaColocar, casillaEnElTablero))
+					if(Utils.hayMovimientoEnFila(tablero, casillaColocar, casillaEnElTablero) ||
+					   Utils.hayMovimientoEnColumna(tablero, casillaColocar, casillaEnElTablero) ||
+					   Utils.hayMovimientoEnDiagonalNegativa(tablero, casillaColocar, casillaEnElTablero) ||
+					   Utils.hayMovimientoEnDiagonalPositiva(tablero, casillaColocar, casillaEnElTablero))
 					{
 						mov = new MovimientoReversi(casillaColocar.fila(), casillaColocar.columna());
 						listaMovs.add(mov);
@@ -135,83 +127,6 @@ public class Reversi extends _Juego {
 			}
 			return movs;
 		}
-
-		private boolean hayMovimientoEnDiagonal(Casilla casillaColocar, Casilla casillaEnElTablero) 
-		{
-			int newFila = 0;
-			int newColumna = 0;
-			
-			for (int i = -8; i <= 8; i++) 
-			{
-				//Diagonal Positiva
-				newFila    = casillaColocar.fila()    - i + 1;
-				newColumna = casillaColocar.columna() + i - 1;
-				
-				if(newFila == casillaEnElTablero.fila() && newColumna == casillaEnElTablero.columna())
-					return true;
-				
-				//Diagonal Negativa
-				newFila    = casillaColocar.fila()    + i + 1;
-				newColumna = casillaColocar.columna() + i + 1;
-				
-				if(newFila == casillaEnElTablero.fila() && newColumna == casillaEnElTablero.columna())
-					return true;
-			}
-			return false;
-		}
-
-		/**
-		 * @param casillaColocar
-		 * @param casillaEnElTablero
-		 * @return true si estan las 2 casillas en la misma columna y puede comer
-		 */
-		private boolean hayMovimientoEnColumna(Casilla casillaColocar, Casilla casillaEnElTablero) 
-		{
-			if(casillaColocar.columna() == casillaEnElTablero.columna())
-			{
-				int fil1, fil2;
-				if(casillaColocar.fila() < casillaEnElTablero.fila()) {
-					fil1 = casillaColocar.fila();
-					fil2 = casillaEnElTablero.fila();
-				} else {
-					fil2 = casillaColocar.fila();
-					fil1 = casillaEnElTablero.fila();
-				}
-				for (int i = fil1 + 1; i < fil2; i++) 
-				{
-					if(tablero.hayFichaAdversario(i, casillaColocar.columna()))
-						return true;
-				}
-			}
-			return false;
-		}
-
-		/**
-		 * @param casillaColocar
-		 * @param casillaEnElTablero
-		 * @return True si las dos casillas estan en la misma fila y puede comer.
-		 */
-		private boolean hayMovimientoEnFila(Casilla casillaColocar, Casilla casillaEnElTablero) 
-		{
-			if(casillaColocar.fila() == casillaEnElTablero.fila())
-			{
-				int col1, col2;
-				if(casillaColocar.columna() < casillaEnElTablero.columna()) {
-					col1 = casillaColocar.columna();
-					col2 = casillaEnElTablero.columna();
-				} else {
-					col2 = casillaColocar.columna();
-					col1 = casillaEnElTablero.columna();
-				}
-				for (int i = col1 + 1; i < col2; i++) 
-				{
-					if(tablero.hayFichaAdversario(casillaColocar.fila(), i))
-						return true;
-				}
-			}
-			return false;
-		}
-
 		
 		private Double resultado(String jugador) 
 		{

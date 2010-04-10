@@ -3,6 +3,7 @@ package juego.Reversi;
 import java.util.ArrayList;
 import java.util.List;
 
+import juego.Reversi.Reversi.EstadoReversi.MovimientoReversi;
 import juegos.base.Movimiento;
 
 /**
@@ -82,9 +83,21 @@ public class Tablero {
 	 */
 	public void actualizarTablero(Movimiento movimiento) 
 	{
+		MovimientoReversi mov = (MovimientoReversi) movimiento;
+		char jugadorMovio = 'B';
+		if(mov.jugador().toString().equals(Reversi.nombreJugadorNegras)) { //Si el jugador que movió son negras...
+			jugadorMovio = 'N';
+		}
+		tablero[mov.newFila][mov.newColumna] = jugadorMovio; //Pongo ficha del judagor que movió en nueva posición
 		
+		// Paso al otro jugador como el actual
+		if(jugadorActual == 0) {
+			jugadorActual++;
+		} else {
+			jugadorActual--;
+		}
 	}
-
+	
 	/**
 	 * @return Jugador a Mover.
 	 */
@@ -93,6 +106,10 @@ public class Tablero {
 		return jugadorActual;
 	}
 
+	/**
+	 * Imprime el tablero
+	 * @return
+	 */
 	public String imprimirse() 
 	{
 		String tabla = "+--+--+--+--+--+--+--+--+ \n";
