@@ -1,10 +1,12 @@
 package juego.Reversi;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import juegos.base.Movimiento;
 
 /**
  * Clase que representa el tablero del Juego Reversi.
- * @author JuanJoséChabkinian
  */
 public class Tablero {
 
@@ -15,6 +17,12 @@ public class Tablero {
 	{
 		tablero = new char[fila][columna];
 		jugadorActual = 0;
+		
+		for (int i = 0; i < tablero.length; i++) {
+			for (int j = 0; j < tablero[0].length; j++) {
+				tablero[i][j] = ' ';
+			}
+		}
 	}
 
 	/**
@@ -101,6 +109,94 @@ public class Tablero {
 			tabla = tabla + "+--+--+--+--+--+--+--+--+ \n";
 		}
 		return tabla;
+	}
+
+	/**
+	 * @return lista de casillas en donde hay fichas del jugador actual
+	 */
+	public List<Casilla> getFichasJugador() 
+	{
+		char fichas = ' ';
+		if(jugadorActual == 0) 
+		{
+			fichas = 'N';
+		} 
+		else if (jugadorActual == 1) {
+			fichas = 'B';
+		}
+		
+		Casilla casilla;
+		List<Casilla> listaCasillas = new ArrayList<Casilla>();
+		for (int i = 0; i < tablero.length; i++) 
+		{
+			for (int j = 0; j < tablero[0].length; j++) 
+			{
+				if(fichas == tablero[i][j])
+				{
+					casilla = new Casilla(i, j);
+					listaCasillas.add(casilla);
+				}
+			}
+		}
+		return listaCasillas;
+	}
+
+
+	/**
+	 * @return lista de casillas donde hay fichas adyacentes, por lo tanto son posiciones tentativas donde se podria colocar una ficha.
+	 */
+	public List<Casilla> getFichasDondeColocar() 
+	{
+		Casilla casilla;
+		List<Casilla> listaCasillas = new ArrayList<Casilla>();
+		for (int i = 0; i < tablero.length; i++) 
+		{
+			for (int j = 0; j < tablero[0].length; j++) 
+			{
+				if(tablero[i][j] == ' ' && hayFichaAdyacente(i,j))
+				{
+					casilla = new Casilla(i, j);
+					listaCasillas.add(casilla);
+				}
+			}
+		}
+		return listaCasillas;
+	}
+
+	/**
+	 * @param i: fila
+	 * @param j: columna
+	 * @return true si hay una ficha adyacente a la ficha en la posicion (i,j)
+	 */
+	private boolean hayFichaAdyacente(int fila, int columna) 
+	{
+		int newFila;
+		int newColumna;
+		for (int x = -1; x <= 1; x++) 
+		{
+			for (int y = -1; y <= 1; y++) 
+			{
+				newFila = fila + x;
+				newColumna = columna + y;
+				if(newFila >= 0 && newFila < 8 && newColumna >=0 && newColumna <8 &&
+						tablero[newFila][newColumna] != ' ')
+					return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean hayFichaAdversario(int fila, int columna) 
+	{
+		char resultado = getCasilla(fila, columna);
+		if(resultado != ' ')
+		{
+			if(jugadorActual == 0 && resultado == 'B')
+				return true;
+			if(jugadorActual == 1 && resultado == 'N')
+				return true;
+		}
+		return false;
 	}
 
 }
