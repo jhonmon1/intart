@@ -102,14 +102,14 @@ public class Reversi extends _Juego {
 			
 			Movimiento mov;
 			List<Movimiento> listaMovs = new ArrayList<Movimiento>();
-			for (Casilla casillaColocar : listaDeFichasDondeColocar) 
-			{
-				for (Casilla casillaEnElTablero : listaDeFichasEnTablero) 
-				{
-					if(Utils.hayMovimientoEnFila(tablero, casillaColocar, casillaEnElTablero) ||
-					   Utils.hayMovimientoEnColumna(tablero, casillaColocar, casillaEnElTablero) ||
-					   Utils.hayMovimientoEnDiagonalNegativa(tablero, casillaColocar, casillaEnElTablero) ||
-					   Utils.hayMovimientoEnDiagonalPositiva(tablero, casillaColocar, casillaEnElTablero))
+			for (Casilla casillaColocar : listaDeFichasDondeColocar) {
+				
+				for (Casilla casillaEnElTablero : listaDeFichasEnTablero) {
+					
+					if(hayMovimientoEnFila(tablero, casillaColocar, casillaEnElTablero) ||
+					   hayMovimientoEnColumna(tablero, casillaColocar, casillaEnElTablero) ||
+					   hayMovimientoEnDiagonalNegativa(tablero, casillaColocar, casillaEnElTablero) ||
+					   hayMovimientoEnDiagonalPositiva(tablero, casillaColocar, casillaEnElTablero))
 					{
 						mov = new MovimientoReversi(casillaColocar.fila(), casillaColocar.columna());
 						listaMovs.add(mov);
@@ -120,24 +120,25 @@ public class Reversi extends _Juego {
 			// Construye el vector de movimientos.
 			Movimiento[] movs = new Movimiento[listaMovs.size()];
 			int count = 0;
-			for (Movimiento movimiento : listaMovs) 
-			{
+			
+			for (Movimiento movimiento : listaMovs) {
 				movs[count] = movimiento;
 				count++;
 			}
+			
 			return movs;
 		}
 		
-		private Double resultado(String jugador) 
-		{
-			if (empate(tablero)) { // empatan
+		private Double resultado(String jugador) {
+			if (empate(tablero)) // empatan
 				return 0.0;
-			} else if (gana(tablero, jugador)) { // gana jugador
-				return 1.0;
-			} else if(gana(tablero, (jugador.equals(nombreJugadorBlancas) ? nombreJugadorNegras : nombreJugadorBlancas))){ // gana jugador contrario
-				return -1.0;
-			}
 			
+			if (gana(tablero, jugador)) // gana jugador
+				return 1.0;
+			
+			if(gana(tablero, (jugador.equals(nombreJugadorBlancas) ? nombreJugadorNegras : nombreJugadorBlancas))) // gana jugador contrario
+				return -1.0;
+						
 			return null;
 		}
 
@@ -150,6 +151,152 @@ public class Reversi extends _Juego {
 		public Double resultado(Jugador jugador) {
 			return resultado(jugador.equals(jugadores[0]) ? nombreJugadorNegras
 					: nombreJugadorBlancas);
+		}
+		
+		/**
+		 * Indica si hay movimientos válidos en la diagonal con pendiente negativa entre las dos casillas
+		 */
+		private boolean hayMovimientoEnDiagonalNegativa(Tablero tablero, Casilla casillaColocar, 
+				Casilla casillaEnElTablero) {
+			
+			if(Utils.mismaDiagonalNegativa(casillaColocar, casillaEnElTablero)) {
+					
+				int filaInicio = casillaEnElTablero.fila();
+				int columnaInicio = casillaEnElTablero.columna();
+					
+				int filaFinal = casillaColocar.fila();
+					
+				// Agarro el que tiene el menor valor de columna
+				if(casillaColocar.columna() < casillaEnElTablero.columna()){
+					filaInicio = casillaColocar.fila();
+					columnaInicio = casillaColocar.columna();
+						
+					filaFinal = casillaEnElTablero.fila();
+				}
+					
+				int columnaActual = columnaInicio;
+					
+				// Si las dos casillas están una al lado de otra -> no hay movimiento posible
+				if(filaInicio + 1 == filaFinal)
+					return false;
+					
+				for(int filaActual = filaInicio + 1; filaActual < filaFinal; filaActual++){
+					columnaInicio += 1;
+					// Si no hay ficha de adversario -> no se puede mover
+					if(! tablero.hayFichaAdversario(filaActual, columnaActual)){
+						return false;
+					}
+				}
+					
+				return true;
+			}
+			
+			return false;
+		}
+		
+		/**
+		 * Indica si hay movimientos válidos en la diagonal con pendiente positiva entre las dos casillas
+		 */
+		private boolean hayMovimientoEnDiagonalPositiva(Tablero tablero, Casilla casillaColocar, 
+				Casilla casillaEnElTablero) {
+			
+			if(Utils.mismaDiagonalPositiva(casillaColocar, casillaEnElTablero)) {
+					
+				int filaInicio = casillaEnElTablero.fila();
+				int columnaInicio = casillaEnElTablero.columna();
+				
+				int filaFinal = casillaColocar.fila();
+				
+				// Agarro el que tiene el menor valor de columna
+				if(casillaColocar.columna() < casillaEnElTablero.columna()){
+					filaInicio = casillaColocar.fila();
+					columnaInicio = casillaColocar.columna();
+					
+					filaFinal = casillaEnElTablero.fila();
+				}
+				
+				int columnaActual = columnaInicio;
+				
+				// Si las dos casillas están una al lado de otra -> no hay movimiento posible
+				if(filaInicio - 1 == filaFinal){
+					return false;
+				}
+				
+				for(int filaActual = filaInicio - 1; filaActual < filaFinal; filaActual--){
+					columnaInicio += 1;
+					// Si no hay ficha de adversario -> no se puede mover
+					if(! tablero.hayFichaAdversario(filaActual, columnaActual)){
+						return false;
+					}
+				}
+				
+				return true;
+			}
+			
+			return false;
+		}
+		
+		/** Indica si hay movimientos válidos en la columna entre las dos casillas
+		 * @param casillaColocar
+		 * @param casillaEnElTablero
+		 * @return true si estan las 2 casillas en la misma columna y puede comer
+		 */
+		private boolean hayMovimientoEnColumna(Tablero tablero, Casilla casillaColocar, Casilla casillaEnElTablero) {
+			
+			if(Utils.mismaColumna(casillaColocar, casillaEnElTablero)) {
+				int fil1, fil2;
+				if(casillaColocar.fila() < casillaEnElTablero.fila()) {
+					fil1 = casillaColocar.fila();
+					fil2 = casillaEnElTablero.fila();
+				} else {
+					fil2 = casillaColocar.fila();
+					fil1 = casillaEnElTablero.fila();
+				}
+				
+				// Si las dos casillas están una al lado de otra -> no hay movimiento posible
+				if(fil1 + 1 == fil2)
+					return false;
+				
+				for (int i = fil1 + 1; i < fil2; i++) {
+					if(! tablero.hayFichaAdversario(i, casillaColocar.columna())) // Si no hay ficha de adversario -> no se puede mover
+						return false;
+				}
+					
+				return true;
+			}
+			return false;
+		}
+		
+		/** Indica si hay movimientos válidos en la fila entre las dos casillas
+		 * @param casillaColocar
+		 * @param casillaEnElTablero
+		 * @return True si las dos casillas estan en la misma fila y puede comer.
+		 */
+		private boolean hayMovimientoEnFila(Tablero tablero, Casilla casillaColocar, Casilla casillaEnElTablero) {
+			
+			if(Utils.mismaFila(casillaColocar, casillaEnElTablero)) {
+				
+				int col1, col2;
+				if(casillaColocar.columna() < casillaEnElTablero.columna()) {
+					col1 = casillaColocar.columna();
+					col2 = casillaEnElTablero.columna();
+				} else {
+					col2 = casillaColocar.columna();
+					col1 = casillaEnElTablero.columna();
+				}
+				
+				// Si las dos casillas están una al lado de otra -> no hay movimiento posible
+				if(col1 + 1 == col2)
+					return false;
+				
+				for (int i = col1 + 1; i < col2; i++) {
+					if(! tablero.hayFichaAdversario(casillaColocar.fila(), i)) // Si no hay ficha de adversario -> no se puede mover
+						return false;
+				}
+				
+				return true;
+			}
+			return false;
 		}
 
 		/**
