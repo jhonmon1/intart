@@ -1,5 +1,6 @@
 package juegos.agentes;
 
+import java.io.PrintStream;
 import java.util.Random;
 import juegos.base.*;
 
@@ -9,6 +10,7 @@ public class AgenteAleatorio implements Agente {
 	private Jugador jugador;
 	private final long seed;
 	private final Random random;
+	private PrintStream output = null;
 	
 	/** Agente aleatorio, iniciando el generador de números pseudoaleatorios con
 	 *  la semilla dada.  
@@ -19,6 +21,11 @@ public class AgenteAleatorio implements Agente {
 	}
 	/** Agente aleatorio con semilla definida al azar. 
 	 */
+	public AgenteAleatorio(PrintStream output) {
+		this((long)(Math.random() * Long.MAX_VALUE));
+		this.output = output;
+	}
+	
 	public AgenteAleatorio() {
 		this((long)(Math.random() * Long.MAX_VALUE));
 	}
@@ -41,7 +48,14 @@ public class AgenteAleatorio implements Agente {
 	}
 	
 	@Override public void movimiento(Movimiento movimiento, Estado estado) {
-		// No hay implementación.
+		if(output != null){
+			output.println(String.format("Jugador %s mueve %s.", movimiento.jugador(), movimiento));
+			printEstado(estado);
+		}
+	}
+	
+	protected void printEstado(Estado estado) {
+		output.println("\t"+ estado.toString().replace("\n", "\n\t"));
 	}
 	
 	@Override public String toString() {

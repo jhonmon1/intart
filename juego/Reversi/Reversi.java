@@ -441,8 +441,17 @@ public class Reversi extends _Juego {
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.out.println(Partida.completa(Reversi.JUEGO, new AgenteConsola(),
-				new AgenteAleatorio()).toString());
+		//Agente aleatorio con salida por consola contra agente aleatorio comun
+//		System.out.println(Partida.completa(Reversi.JUEGO, new AgenteAleatorio(System.out),//new AgenteConsola(),
+//				new AgenteAleatorio()).toString());
+		
+		//Agente aleatorio comun contra agente aleatorio comun
+//		System.out.println(Partida.completa(Reversi.JUEGO, new AgenteAleatorio(),
+//				new AgenteAleatorio()).toString());
+		
+		//Agente aleatorio comun contra usuario (Agente consola)
+		System.out.println(Partida.completa(Reversi.JUEGO,
+				new AgenteAleatorio(), new AgenteConsola()).toString());
 	}
 
 }
