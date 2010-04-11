@@ -139,14 +139,14 @@ public class Reversi extends _Juego {
 			Movimiento mov;
 			List<Movimiento> listaMovs = new ArrayList<Movimiento>();
 			for (Casilla casillaColocar : listaDeFichasDondeColocar) {
+				
+				// Para cada casilla en donde podríamos colocar, verificamos
+				// que exista algun tipo de movimiento
+				List<Casilla> casillasQueCambian = new ArrayList<Casilla>();
 
 				for (Casilla casillaEnElTablero : listaDeFichasEnTablero) {
 
-					// Para cada casilla en donde podríamos colocar, verificamos
-					// que exista algun tipo de movimiento
-
-					List<Casilla> casillasQueCambian = new ArrayList<Casilla>();
-					
+				
 					//Hacemos ésto debido a que cada verificacion de movimiento
 					//en caso de que exista va cargando en casillasQueCambian
 					//las casillas del contrario que cambiarian al hacer ese movimiento
@@ -289,8 +289,7 @@ public class Reversi extends _Juego {
 
 				// Agregamos cada una de las casillas que cambiarían al agregar
 				// ésta ficha
-				casillasQueCambian.addAll(casillasQueCambian.size(),
-						casillasQueCambianAux);
+				casillasQueCambian.addAll(casillasQueCambianAux);
 				return true;
 			}
 
@@ -343,8 +342,7 @@ public class Reversi extends _Juego {
 
 				// Agregamos cada una de las casillas que cambiarían al agregar
 				// ésta ficha
-				casillasQueCambian.addAll(casillasQueCambian.size(),
-						casillasQueCambianAux);
+				casillasQueCambian.addAll(casillasQueCambianAux);
 				return true;
 			}
 
@@ -397,8 +395,7 @@ public class Reversi extends _Juego {
 
 				// Agregamos cada una de las casillas que cambiarían al agregar
 				// ésta ficha
-				casillasQueCambian.addAll(casillasQueCambian.size(),
-						casillasQueCambianAux);
+				casillasQueCambian.addAll(casillasQueCambianAux);
 				return true;
 			}
 			return false;
@@ -450,8 +447,7 @@ public class Reversi extends _Juego {
 
 				// Agregamos cada una de las casillas que cambiarían al agregar
 				// ésta ficha
-				casillasQueCambian.addAll(casillasQueCambian.size(),
-						casillasQueCambianAux);
+				casillasQueCambian.addAll(casillasQueCambianAux);
 				return true;
 			}
 			return false;
