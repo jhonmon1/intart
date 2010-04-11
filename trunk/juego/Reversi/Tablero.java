@@ -1,5 +1,6 @@
 package juego.Reversi;
 
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import juegos.base.Movimiento;
 public class Tablero {
 
 	private char[][] tablero;
+	
+	//Si el jugador actual es 0, corresponde a las negras,  si es 1 corresponde a las blancas
 	private int jugadorActual;
 	
 	public Tablero(int fila, int columna) 
@@ -19,6 +22,7 @@ public class Tablero {
 		tablero = new char[fila][columna];
 		jugadorActual = 0;
 		
+		//Inicializamos el tablero vacio por defecto
 		for (int i = 0; i < tablero.length; i++) {
 			for (int j = 0; j < tablero[0].length; j++) {
 				tablero[i][j] = ' ';
@@ -27,15 +31,15 @@ public class Tablero {
 	}
 
 	/**
-	 * @return cantidad de fichas negras en el tablero.
+	 * @return cantidad de fichas para un determinado jugador, ('N' o 'B').
 	 */
-	public int fichasNegras() {
+	public int cantidadFichas(char jugador) {
 		int resultado = 0;
 		char ficha;
 		for (int i = 0; i < tablero.length; i++) {
 			for (int j = 0; j < tablero[0].length; j++) {
 				ficha = getCasilla(i, j);
-				if(ficha == 'N') {
+				if(ficha == jugador) {
 					resultado++;
 				}
 			}
@@ -43,31 +47,15 @@ public class Tablero {
 		return resultado;
 	}
 
-	/**
-	 * @return cantidad de fichas blancas en el tablero.
-	 */
-	public int fichasBlancas() {
-		int resultado = 0;
-		char ficha = ' ';
-		for (int i = 0; i < tablero.length; i++) {
-			for (int j = 0; j < tablero[0].length; j++) {
-				ficha = getCasilla(i, j);
-				if(ficha == 'B') {
-					resultado++;
-				}
-			}
+
+	public void setCasilla(int fila, int columna, char charAux) 
+	{
+		if(fila < tablero.length && columna < tablero[0].length)
+		{
+		    tablero[fila][columna] = charAux;
 		}
-		return resultado;
 	}
 	
-	/**
-	 * @return true si el tablero esta lleno, es decir, nos encontramos en un tablero final.
-	 */
-	public boolean esFinal() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public char getCasilla(int fila, int columna) 
 	{
 		if(fila < tablero.length && columna < tablero[0].length)
@@ -85,10 +73,19 @@ public class Tablero {
 	{
 		MovimientoReversi mov = (MovimientoReversi) movimiento;
 		char jugadorMovio = 'B';
-		if(mov.jugador().toString().equals(Reversi.nombreJugadorNegras)) { //Si el jugador que movió son negras...
+		//Establecemos el jugador que mueve
+		if(mov.jugador().toString().equals(Reversi.nombreJugadorNegras)) { //Si el jugador que movió son negras
 			jugadorMovio = 'N';
 		}
-		tablero[mov.newFila][mov.newColumna] = jugadorMovio; //Pongo ficha del judagor que movió en nueva posición
+		//Pongo ficha del judagor que movió en nueva posición
+		tablero[mov.newFila][mov.newColumna] = jugadorMovio; 
+		
+		//QUEDA ACTUALIZAR LO QUE CAMBIA DE AGREGAR DICHA FICHA EN EL TABLERO
+		List<Casilla> casillasQueCambian = mov.casillasQueCambian;
+		for(Casilla unaCasilla : casillasQueCambian)
+		{
+			tablero[unaCasilla.fila()][unaCasilla.columna()] = jugadorMovio;
+		}
 		
 		// Paso al otro jugador como el actual
 		if(jugadorActual == 0) {
@@ -112,7 +109,8 @@ public class Tablero {
 	 */
 	public String imprimirse() 
 	{
-		String tabla = "+--+--+--+--+--+--+--+--+ \n";
+		String tabla = "  A  B  C  D  E  F  G  H \n" + 
+						"+--+--+--+--+--+--+--+--+ \n";
 		char resultado;
 		
 		for (int i = 0; i < tablero.length; i++) 
@@ -122,7 +120,7 @@ public class Tablero {
 				resultado = getCasilla(i, j);
 				tabla = tabla + "|" + resultado + " ";
 			}
-			tabla = tabla + "|\n";
+			tabla = tabla + "|"+ (i+1) + "\n";
 			tabla = tabla + "+--+--+--+--+--+--+--+--+ \n";
 		}
 		return tabla;
