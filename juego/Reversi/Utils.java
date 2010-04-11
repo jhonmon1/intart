@@ -1,5 +1,11 @@
 package juego.Reversi;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import juego.Reversi.Reversi.EstadoReversi.MovimientoReversi;
+import juegos.base.Movimiento;
+
 public class Utils {
 
 	/**
@@ -82,5 +88,70 @@ public class Utils {
 		return false;
 	}
 
+	/**
+	 * Método que se encarga de ordenar un array de movimientos.
+	 * @param movs: array de movimientos.
+	 */
+	public static void ordenarMovimientos(Movimiento[] movs) 
+	{
+		boolean hayCambios = true;
+		int v1 = 0;
+		int v2 = 0;
+		Movimiento movAux;
+		 
+		for (int i = 0; hayCambios ; i++) 
+		{
+			hayCambios = false;
+		    for (int j = 0; j < movs.length - 1; j++) 
+		    {
+		    	v1 = ((MovimientoReversi)movs[j]).newColumna;
+		    	v2 = ((MovimientoReversi)movs[j + 1]).newColumna;
+		    	if (v1 > v2) 
+		    	{
+		    		movAux = movs[j];
+		    		movs[j] = movs[j + 1];
+		    		movs[j + 1] = movAux;
+		    		hayCambios = true;
+		    	}
+		    }
+		}		
+	}
+
+	/**
+	 * Elimina los movimientos repetidos en el array.
+	 * @param movs: array de movimientos del reversi.
+	 */
+	public static Movimiento[] borrarRepetidos(Movimiento[] movs) 
+	{
+		List<MovimientoReversi> aux = new ArrayList<MovimientoReversi>();
+		MovimientoReversi mov;
+		boolean agregar = true;
+		
+		for (int i = 0; i < movs.length; i++) 
+		{
+			mov = ((MovimientoReversi)movs[i]);
+			for (MovimientoReversi mr : aux) 
+			{
+				if(mov.newColumna == mr.newColumna && mov.newFila == mr.newFila)
+				{
+					agregar = false;
+					mr.casillasQueCambian.addAll(mov.casillasQueCambian);
+				}
+			}
+			if(agregar) {
+				aux.add(mov);
+			} else {
+				agregar = true;
+			}
+		}
+		Movimiento[] movimientos = new Movimiento[aux.size()];
+		int count = 0;
+		for (MovimientoReversi movimientoReversi : aux) 
+		{
+			movimientos[count] = movimientoReversi;
+			count++;
+		}
+		return movimientos;
+	}
 	
 }
