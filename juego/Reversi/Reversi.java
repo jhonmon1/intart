@@ -133,8 +133,7 @@ public class Reversi extends _Juego {
 			List<Casilla> listaDeFichasEnTablero = tablero.getFichasJugador(
 					(jugadorHabilitado == 0 ? 'N' : 'B'));
 			// Lista de fichas donde sería posible colocar
-			List<Casilla> listaDeFichasDondeColocar = tablero
-					.getFichasDondeColocar();
+			List<Casilla> listaDeFichasDondeColocar = tablero.getFichasDondeColocar();
 
 			Movimiento mov;
 			List<Movimiento> listaMovs = new ArrayList<Movimiento>();
@@ -460,12 +459,14 @@ public class Reversi extends _Juego {
 			public final int newFila;
 			public final int newColumna;
 			List<Casilla> casillasQueCambian;
+			public Jugador jugador;
 
 			public MovimientoReversi(int newFila, int newColumna,
 					List<Casilla> casillasQueCambian) {
 				this.newFila = newFila;
 				this.newColumna = newColumna;
 				this.casillasQueCambian = casillasQueCambian;
+				jugador =  jugadores[tablero.getJugadorActual()];
 			}
 
 			@Override
@@ -480,7 +481,7 @@ public class Reversi extends _Juego {
 			 */
 			@Override
 			public Jugador jugador() {
-				return jugadores[tablero.getJugadorActual()];
+				return jugador;
 			}
 
 			/**
@@ -500,9 +501,9 @@ public class Reversi extends _Juego {
 
 	public static void main(String[] args) throws Exception {
 		// Agente aleatorio con salida por consola contra agente aleatorio comun
-		// System.out.println(Partida.completa(Reversi.JUEGO, new
-		// AgenteAleatorio(System.out),//new AgenteConsola(),
-		// new AgenteAleatorio()).toString());
+		 System.out.println(Partida.completa(Reversi.JUEGO, new
+		 AgenteAleatorio(System.out),//new AgenteConsola(),
+		 new AgenteAleatorio()).toString());
 
 		// Agente aleatorio comun contra agente aleatorio comun
 		// System.out.println(Partida.completa(Reversi.JUEGO, new
@@ -510,8 +511,8 @@ public class Reversi extends _Juego {
 		// new AgenteAleatorio()).toString());
 
 		// Agente aleatorio comun contra usuario (Agente consola)
-		System.out.println(Partida.completa(Reversi.JUEGO, new AgenteConsola(),
-				new AgenteAleatorio()).toString());
+//		System.out.println(Partida.completa(Reversi.JUEGO, new AgenteConsola(),
+//				new AgenteAleatorio()).toString());
 	}
 
 }
