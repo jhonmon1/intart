@@ -80,7 +80,7 @@ public class Tablero {
 		//Pongo ficha del judagor que movió en nueva posición
 		tablero[mov.newFila][mov.newColumna] = jugadorMovio; 
 		
-		//QUEDA ACTUALIZAR LO QUE CAMBIA DE AGREGAR DICHA FICHA EN EL TABLERO
+		//Actualizamos las casillas correspondientes
 		List<Casilla> casillasQueCambian = mov.casillasQueCambian;
 		for(Casilla unaCasilla : casillasQueCambian)
 		{
@@ -129,16 +129,9 @@ public class Tablero {
 	/**
 	 * @return lista de casillas en donde hay fichas del jugador actual
 	 */
-	public List<Casilla> getFichasJugador() 
+	public List<Casilla> getFichasJugador(char jugador) 
 	{
-		char fichas = ' ';
-		if(jugadorActual == 0) 
-		{
-			fichas = 'N';
-		} 
-		else if (jugadorActual == 1) {
-			fichas = 'B';
-		}
+		char fichas = jugador;
 		
 		Casilla casilla;
 		List<Casilla> listaCasillas = new ArrayList<Casilla>();

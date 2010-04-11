@@ -18,10 +18,8 @@ public class Reversi extends _Juego {
 	public static String nombreJugadorNegras = "JugadorNegras";
 	public static String nombreJugadorBlancas = "JugadorBlancas";
 
-	public static final String[] FILAS = { "1", "2", "3", "4", "5", "6", "7",
-			"8" };
-	public static final String[] COLUMNAS = { "A", "B", "C", "D", "E", "F",
-			"G", "H" };
+	public static final String[] FILAS = { "1", "2", "3", "4", "5", "6", "7", "8" };
+	public static final String[] COLUMNAS = { "A", "B", "C", "D", "E", "F",	"G", "H" };
 
 	// Creamos un juego reversi para 2 Jugadoresm, uno fichas negras y otro
 	// fichas balncas
@@ -132,7 +130,8 @@ public class Reversi extends _Juego {
 				return null;
 			}
 			// Lista de fichas en el tablero para el jugador dado
-			List<Casilla> listaDeFichasEnTablero = tablero.getFichasJugador();
+			List<Casilla> listaDeFichasEnTablero = tablero.getFichasJugador(
+					(jugadorHabilitado == 0 ? 'N' : 'B'));
 			// Lista de fichas donde sería posible colocar
 			List<Casilla> listaDeFichasDondeColocar = tablero
 					.getFichasDondeColocar();
@@ -147,17 +146,24 @@ public class Reversi extends _Juego {
 					// que exista algun tipo de movimiento
 
 					List<Casilla> casillasQueCambian = new ArrayList<Casilla>();
-
-					if (hayMovimientoEnFila(tablero, casillaColocar,
-							casillaEnElTablero, casillasQueCambian)
-							|| hayMovimientoEnColumna(tablero, casillaColocar,
-									casillaEnElTablero, casillasQueCambian)
-							|| hayMovimientoEnDiagonalNegativa(tablero,
-									casillaColocar, casillaEnElTablero,
-									casillasQueCambian)
-							|| hayMovimientoEnDiagonalPositiva(tablero,
-									casillaColocar, casillaEnElTablero,
-									casillasQueCambian)) {
+					
+					//Hacemos ésto debido a que cada verificacion de movimiento
+					//en caso de que exista va cargando en casillasQueCambian
+					//las casillas del contrario que cambiarian al hacer ese movimiento
+					//si hacemos el OR con las coldiciones podría llegar a verificar una
+					//sola y no setear correctamente todas las casillas que cambian
+					//al hacer el movimiento
+					boolean resultado1 = hayMovimientoEnFila(tablero, casillaColocar,
+							casillaEnElTablero, casillasQueCambian);
+					boolean resultado2 = hayMovimientoEnColumna(tablero, casillaColocar,
+							casillaEnElTablero, casillasQueCambian);
+					boolean resultado3 = hayMovimientoEnDiagonalNegativa(tablero,
+							casillaColocar, casillaEnElTablero, casillasQueCambian);
+					boolean resultado4 = hayMovimientoEnDiagonalPositiva(tablero,
+							casillaColocar, casillaEnElTablero, casillasQueCambian);
+							
+					if (resultado1||resultado2||resultado3||resultado4) 
+					{
 						mov = new MovimientoReversi(casillaColocar.fila(),
 								casillaColocar.columna(), casillasQueCambian);
 						listaMovs.add(mov);
