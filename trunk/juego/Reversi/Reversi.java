@@ -137,15 +137,15 @@ public class Reversi extends _Juego {
 
 			Movimiento mov;
 			List<Movimiento> listaMovs = new ArrayList<Movimiento>();
+			
 			for (Casilla casillaColocar : listaDeFichasDondeColocar) {
 				
 				// Para cada casilla en donde podríamos colocar, verificamos
 				// que exista algun tipo de movimiento
 				List<Casilla> casillasQueCambian = new ArrayList<Casilla>();
-
+				
 				for (Casilla casillaEnElTablero : listaDeFichasEnTablero) {
 
-				
 					//Hacemos ésto debido a que cada verificacion de movimiento
 					//en caso de que exista va cargando en casillasQueCambian
 					//las casillas del contrario que cambiarian al hacer ese movimiento
@@ -184,6 +184,9 @@ public class Reversi extends _Juego {
 				count++;
 			}
 
+			movs = Utils.borrarRepetidos(movs);
+			Utils.ordenarMovimientos(movs);
+			
 			return movs;
 		}
 
@@ -232,7 +235,6 @@ public class Reversi extends _Juego {
 		 * @return true si ningun jugador tiene movimientos, false si para algun
 		 *         jugador existe al menos un movimiento.
 		 */
-
 		private boolean esFinal() {
 			Jugador[] todosLosJugadores = this.jugadores();
 			for (Jugador unJugador : todosLosJugadores) {
@@ -382,8 +384,7 @@ public class Reversi extends _Juego {
 				// Verificamos que en la misma columna entre las dos filas solo
 				// haya fichas del adversario
 				for (int i = fil1 + 1; i < fil2; i++) {
-					if (!tablero
-							.hayFichaAdversario(i, casillaColocar.columna()))
+					if (!tablero.hayFichaAdversario(i, casillaColocar.columna()))
 						return false;
 
 					// Agregamos ésta casilla ya que debería cambiar al agregar
@@ -456,9 +457,10 @@ public class Reversi extends _Juego {
 		 * Clase que representa los movimientos del juego Reversi
 		 */
 		public class MovimientoReversi implements Movimiento {
+			
 			public final int newFila;
 			public final int newColumna;
-			List<Casilla> casillasQueCambian;
+			public List<Casilla> casillasQueCambian;
 			public Jugador jugador;
 
 			public MovimientoReversi(int newFila, int newColumna,
@@ -468,7 +470,7 @@ public class Reversi extends _Juego {
 				this.casillasQueCambian = casillasQueCambian;
 				jugador =  jugadores[tablero.getJugadorActual()];
 			}
-
+			
 			@Override
 			public Estado estado() {
 				return EstadoReversi.this;
@@ -499,20 +501,20 @@ public class Reversi extends _Juego {
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
-		// Agente aleatorio con salida por consola contra agente aleatorio comun
-		 System.out.println(Partida.completa(Reversi.JUEGO, new
-		 AgenteAleatorio(System.out),//new AgenteConsola(),
-		 new AgenteAleatorio()).toString());
-
-		// Agente aleatorio comun contra agente aleatorio comun
-		// System.out.println(Partida.completa(Reversi.JUEGO, new
-		// AgenteAleatorio(),
-		// new AgenteAleatorio()).toString());
-
-		// Agente aleatorio comun contra usuario (Agente consola)
-//		System.out.println(Partida.completa(Reversi.JUEGO, new AgenteConsola(),
-//				new AgenteAleatorio()).toString());
+	public static void main(String[] args) throws Exception 
+	{
+		Agente agenteAleatorio1 = new AgenteAleatorio(System.out);
+		Agente agenteAleatorio2 = new AgenteAleatorio();
+		Agente agenteConsola = new AgenteConsola();
+		
+		Agente a1;
+		Agente a2;
+		
+		a1 = agenteAleatorio1;
+		a2= agenteAleatorio2;
+		a2 = agenteConsola;
+		
+		System.out.println(Partida.completa(Reversi.JUEGO, a1, a2).toString());
 	}
 
 }
