@@ -1,64 +1,32 @@
 package juegos.agentes;
 
+
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import juego.Reversi.Reversi.EstadoReversi.MovimientoReversi;
-import juegos.base.Agente;
-import juegos.base.Estado;
-import juegos.base.Jugador;
-import juegos.base.Movimiento;
+import juegos.base.*;
 
-public class AgenteHeuristico1 implements Agente
+
+public class AgenteHeuristico1 extends _AgenteHeuristico
 {
 	private Jugador jugador;
 	private PrintStream output = null;
+	private int niveles;
 	
 	/** Agente aleatorio, iniciando el generador de números pseudoaleatorios con
 	 *  la semilla dada.  
 	 */
-	public AgenteHeuristico1() 
+	public AgenteHeuristico1(int niveles) 
 	{
 		super();
+		this.niveles = niveles;
 	}
 	
 	@Override public Jugador jugador() {
 		return jugador;
-	}
-	
-	/**
-	 * Método encargado de decidir que movimiento realizar a partir del estado actual.
-	 * Este agente en particular eligirá el movimiento que "coma" mas fichas del contrario.
-	 */
-	@Override public Movimiento decision(Estado estado) 
-	{
-		Movimiento[] movs = estado.movimientos(jugador);
-		
-		// El valor del movimiento es el número de fichas que va a comer
-		int valorMax = 0;
-		int valorAux = 0;
-		MovimientoReversi mov = null;
-		List<Movimiento> lista = new ArrayList<Movimiento>();
-		
-		for (int i = 0; i < movs.length; i++) 
-		{
-			mov = (MovimientoReversi)movs[i];
-			valorAux = mov.casillasQueCambian.size();
-			if(valorAux > valorMax)
-			{
-				lista = new ArrayList<Movimiento>();
-				lista.add(mov);
-			}
-			if(valorAux == valorMax)
-			{
-				lista.add(mov);
-			}
-		}
-		Random random = new Random();
-		int index = random.nextInt(lista.size());
-		return lista.get(index);
 	}
 	
 	@Override public void comienzo(Jugador jugador, Estado estado) {
@@ -83,5 +51,16 @@ public class AgenteHeuristico1 implements Agente
 	@Override public String toString() {
 		return String.format("Agente Heuristico 1", " - ");
 	}
+
+	@Override
+	public double darHeuristica(Estado estado) {
+		return 1;
+	}
+
+	@Override
+	public int niveles() {
+		return niveles;
+	}
+
 
 }

@@ -32,4 +32,6 @@ public interface Estado {
 	/** Obtiene el siguiente estado, resultante de ejecutar el movimiento. 
 	 */
 	public Estado siguiente(Movimiento movimiento);
+
+	public Estado copiar();
 }

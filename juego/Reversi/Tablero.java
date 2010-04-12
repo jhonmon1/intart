@@ -17,6 +17,12 @@ public class Tablero {
 	//Si el jugador actual es 0, corresponde a las negras,  si es 1 corresponde a las blancas
 	private int jugadorActual;
 	
+	public Tablero(char[][] tablero) 
+	{
+		this.tablero = tablero;
+		jugadorActual = 0;
+	}
+	
 	public Tablero(int fila, int columna) 
 	{
 		tablero = new char[fila][columna];
@@ -205,6 +211,22 @@ public class Tablero {
 				return true;
 		}
 		return false;
+	}
+
+	public Tablero copiar() {
+		//return (new Tablero(tablero.clone()));
+		Tablero tableroNuevo =  new Tablero(tablero.length,tablero.length);
+		
+		for(int fila = 0; fila < tablero.length; fila++)
+		{
+			for(int colu = 0; colu < tablero.length; colu++)
+			{
+				tableroNuevo.setCasilla(fila, colu, tablero[fila][colu]);
+			}
+		}
+		
+		return tableroNuevo;
+		
 	}
 
 }
