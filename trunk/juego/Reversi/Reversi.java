@@ -499,6 +499,11 @@ public class Reversi extends _Juego {
 		public String toString() {
 			return tablero.imprimirse();
 		}
+
+		@Override
+		public Estado copiar() {
+			return (new EstadoReversi(tablero.copiar()));
+		}
 	}
 
 	public static void main(String[] args) throws Exception 
@@ -506,7 +511,7 @@ public class Reversi extends _Juego {
 		Agente agenteAleatorio1 = new AgenteAleatorio(System.out);
 		Agente agenteAleatorio2 = new AgenteAleatorio();
 		Agente agenteConsola = new AgenteConsola();
-		Agente agenteHeuristico1 = new AgenteHeuristico1();
+		Agente agenteHeuristico1 = new AgenteHeuristico1(5);
 		
 		Agente a1;
 		Agente a2;
@@ -516,7 +521,6 @@ public class Reversi extends _Juego {
 		
 		a2 = agenteAleatorio2;
 		a2 = agenteConsola;
-		
 		
 		System.out.println(Partida.completa(Reversi.JUEGO, a1, a2).toString());
 	}
