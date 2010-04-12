@@ -506,13 +506,17 @@ public class Reversi extends _Juego {
 		Agente agenteAleatorio1 = new AgenteAleatorio(System.out);
 		Agente agenteAleatorio2 = new AgenteAleatorio();
 		Agente agenteConsola = new AgenteConsola();
+		Agente agenteHeuristico1 = new AgenteHeuristico1();
 		
 		Agente a1;
 		Agente a2;
 		
 		a1 = agenteAleatorio1;
-		a2= agenteAleatorio2;
+		a1 = agenteHeuristico1;
+		
+		a2 = agenteAleatorio2;
 		a2 = agenteConsola;
+		
 		
 		System.out.println(Partida.completa(Reversi.JUEGO, a1, a2).toString());
 	}
