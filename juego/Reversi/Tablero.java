@@ -1,6 +1,5 @@
 package juego.Reversi;
 
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,13 +93,18 @@ public class Tablero {
 		}
 		
 		// Paso al otro jugador como el actual
+		cambiarJugador();
+	}
+	
+	public void cambiarJugador() {
 		if(jugadorActual == 0) {
 			jugadorActual++;
 		} else {
 			jugadorActual--;
 		}
+		
 	}
-	
+
 	/**
 	 * @return Jugador a Mover.
 	 */
