@@ -31,7 +31,7 @@ public class Reversi extends _Juego {
 	 */
 	@Override
 	public Estado inicio(Jugador... jugadores) {
-		Tablero tablero = new Tablero(8, 8);
+		Tablero tablero = new Tablero(8, 8, 0);
 		tablero.setCasilla(3, 3, 'B');
 		tablero.setCasilla(3, 4, 'N');
 		tablero.setCasilla(4, 3, 'N');

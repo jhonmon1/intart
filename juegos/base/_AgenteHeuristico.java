@@ -19,7 +19,7 @@ public abstract class _AgenteHeuristico implements Agente{
 		//los movimientos posibles para un estado
 		for(Movimiento movimiento : movimientos){
 			estadoAux = estado.copiar();
-			valorAux = alfaBeta(estadoAux.siguiente(movimiento), Double.MIN_VALUE, Double.MAX_VALUE ,niveles-1, indiceJugador, indiceJugador);
+			valorAux = alfaBeta(estadoAux.siguiente(movimiento), Double.MIN_VALUE, Double.MAX_VALUE ,niveles-1, cambiar(indiceJugador), indiceJugador);
 			if(valorAux > eleccion)
 			{
 				eleccion = valorAux;
