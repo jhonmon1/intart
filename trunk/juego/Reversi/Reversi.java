@@ -1,7 +1,6 @@
 package juego.Reversi;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import juegos.Partida;
@@ -123,15 +122,18 @@ public class Reversi extends _Juego {
 		public Movimiento[] movimientos(Jugador jugador) {
 			// Si el jugador no es el que mueve, o ha terminado la partida,
 			// retorna null.
+			
 			int jugadorHabilitado = tablero.getJugadorActual();
-
+	
 			if (!jugador.equals(jugadores[jugadorHabilitado])) {
 				// || resultado(jugadores[jugadorHabilitado]) != null) {
 				return null;
 			}
+			
 			// Lista de fichas en el tablero para el jugador dado
 			List<Casilla> listaDeFichasEnTablero = tablero.getFichasJugador(
 					(jugadorHabilitado == 0 ? 'N' : 'B'));
+			
 			// Lista de fichas donde sería posible colocar
 			List<Casilla> listaDeFichasDondeColocar = tablero.getFichasDondeColocar();
 
@@ -235,7 +237,7 @@ public class Reversi extends _Juego {
 		 * @return true si ningun jugador tiene movimientos, false si para algun
 		 *         jugador existe al menos un movimiento.
 		 */
-		private boolean esFinal() {
+		public boolean esFinal() {
 			Jugador[] todosLosJugadores = this.jugadores();
 			for (Jugador unJugador : todosLosJugadores) {
 				if (movimientos(unJugador) != null) {

@@ -34,4 +34,6 @@ public interface Estado {
 	public Estado siguiente(Movimiento movimiento);
 
 	public Estado copiar();
+	
+	public boolean esFinal();
 }

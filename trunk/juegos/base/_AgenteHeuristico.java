@@ -1,12 +1,5 @@
 package juegos.base;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import juego.Reversi.Arbol;
-import juego.Reversi.Nodo;
-import juego.Reversi.Reversi.EstadoReversi.MovimientoReversi;
 
 public abstract class _AgenteHeuristico implements Agente{
 
@@ -14,62 +7,97 @@ public abstract class _AgenteHeuristico implements Agente{
 	
 	public abstract double darHeuristica(Estado estado);
 	
-	public  Movimiento miniMax(Estado estado, Movimiento[] movimientos, int niveles)
+	public  Movimiento miniMax(Estado estado, Movimiento[] movimientos, int niveles, int indiceJugador)
 	{
-		List<Arbol> arboles = new ArrayList<Arbol>();
+		Movimiento movimientoDevolver = null;		
+		double eleccion = Double.MIN_VALUE;
+		double valorAux;
+
+		Estado estadoAux;
 		
 		//Obtenemos todos los arboles resultados de aplicar cada uno de
 		//los movimientos posibles para un estado
 		for(Movimiento movimiento : movimientos){
-			arboles.add(obtenerArbol(estado, movimiento, niveles-1, 1));
-		}
-		
-		double valorAux = arboles.get(0).getValorArbol();
-		Movimiento movAux = arboles.get(0).getNodo().getMovimiento();
-		
-		//Maximizamos ya que es el primer movimiento del miniMax
-		for (Arbol arbol: arboles) 
-		{
-			if(arbol.getValorArbol() > valorAux)
+			estadoAux = estado.copiar();
+			valorAux = alfaBeta(estadoAux.siguiente(movimiento), Double.MIN_VALUE, Double.MAX_VALUE ,niveles-1, indiceJugador, indiceJugador);
+			if(valorAux > eleccion)
 			{
-				valorAux = arbol.getValorArbol();
-				movAux = arbol.getNodo().getMovimiento();
+				eleccion = valorAux;
+				movimientoDevolver = movimiento;
 			}
 		}
-		return movAux;
+		
+		return movimientoDevolver;
 	
 	}
 	
 	
-	//Jugador 0 indica yo, 1 contrario
-	public Arbol obtenerArbol(Estado estado, Movimiento movimiento, int niveles, int jugador)
+	public double alfaBeta(Estado estado, double alfa, double beta, int niveles, int jugador, int jugadorMaximiza)
 	{
-		jugador = cambiar(jugador);
-		if(niveles != 0){	
-			Estado estadoAux = estado.copiar();
-			
-			List<Arbol> hijos = new ArrayList<Arbol>();
-			
-			Estado estadoAplicaMov = estadoAux.siguiente(movimiento);	
-			
-			//Esta mal tenemos que cambiar de jugador para MIN o MAX y ademas me da siempre null,
-			//me tiene que dar los movimientos para el jugador
-			Movimiento[] movimientos = estadoAplicaMov.movimientos(movimiento.jugador());
-			
-			for (Movimiento unMovimiento : movimientos) 
-			{
-				Arbol arbolAux = obtenerArbol(estadoAplicaMov, unMovimiento, niveles-1, jugador);
-				hijos.add(arbolAux);
-			}
-				
-			Nodo nodo = new Nodo(estado, movimiento);
-			return (new Arbol(nodo, hijos, minMax(hijos,jugador)));
+		if(niveles == 0 || estado.esFinal())
+		{
+			return darHeuristica(estado);
 		}
 		
-		Nodo nodo = new Nodo(estado.siguiente(movimiento), movimiento);
-		return (new Arbol(nodo, null, darHeuristica(estado)));
+		Estado estadoAux = estado.copiar();
+
+		Jugador jugadorPasada =  obtenerJugador(estado.jugadores(), jugador);
+		
+		Movimiento[] movimientos = estadoAux.movimientos(jugadorPasada);
+		
+		//El jugador actual es el que maximiza
+		if(jugador == jugadorMaximiza)
+		{
+			for(Movimiento movimiento : movimientos)
+			{
+				double valor = alfaBeta(estado.siguiente(movimiento), 
+						alfa, beta, niveles-1,cambiar(jugador),jugadorMaximiza);
+				
+				if(valor<alfa)
+				{ 	alfa = valor;} //Encontramos un nuevo mejor movimiento 
+				
+				if(alfa>= beta)
+				{	return alfa; }//Hacemos la poda
+
+			}
+			
+			return alfa; //Nuestro mejor movimiento
+
+		} //El jugador actual es el que minimiza
+		else
+		{	for(Movimiento movimiento : movimientos)
+			{
+				double valor = alfaBeta(estado.siguiente(movimiento), 
+						alfa, beta, niveles-1,cambiar(jugador),jugadorMaximiza);
+				
+				if(valor<beta)
+				{ 	beta = valor;} //El oponente encontro un nuevo mejor movimiento para el (peor para nosotros) 
+				
+				if(alfa>= beta)
+				{	return beta; } //Hacemos la poda
+
+			}
+			return beta; //Mejor movimiento para el oponente
+		}
+
 	}
 	
+	private Jugador obtenerJugador(Jugador[] jugadores, int jugador) {
+		return jugadores[jugador];
+	}
+	
+	private int obtenerJugador(Jugador[] jugadores, Jugador jugador) {
+		int indice = 0;
+		for(Jugador unJugador : jugadores)
+		{
+			if(unJugador.equals(jugador))
+				return indice;
+			indice++;
+		}
+		
+		return -1;
+	}
+
 	//Cambia valor de jugador entre 0 y 1
 	private int cambiar(int jugador) {
 		if(jugador==0)
@@ -81,33 +109,12 @@ public abstract class _AgenteHeuristico implements Agente{
 		}
 	}
 
-	//Devuelve el menor o mayor valore de una lista de arboles, si
-	//jugador == 0 - > MAX
-	//jugador == 1 - > MIN
-	private Double minMax(List<Arbol> hijos, int jugador) {
-		double min = hijos.get(0).getValorArbol();
-		double max = hijos.get(0).getValorArbol();
-		
-		for(Arbol arbol : hijos)
-		{
-			if(arbol.getValorArbol() < min)
-			{ min = arbol.getValorArbol();}
-			
-			if(arbol.getValorArbol() > max)
-			{ max = arbol.getValorArbol();}
-		}
-		
-		if(jugador == 0){
-			return max;
-		}else
-		{
-			return min;
-		}
-	}
 
 	@Override
 	 public Movimiento decision(Estado estado){
 		Movimiento[] movs = estado.movimientos(jugador());
-		return (miniMax(estado,movs,niveles()));
+		int indiceJugador = obtenerJugador(estado.jugadores(), jugador());
+		
+		return miniMax(estado,movs,5,indiceJugador);
 	}
 }
