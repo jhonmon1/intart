@@ -2,11 +2,10 @@ package juegos.agentes;
 
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import juego.Reversi.Reversi.EstadoReversi.MovimientoReversi;
+
+import juego.Reversi.Tablero;
+import juego.Reversi.Reversi.EstadoReversi;
 import juegos.base.*;
 
 
@@ -54,7 +53,13 @@ public class AgenteHeuristico1 extends _AgenteHeuristico
 
 	@Override
 	public double darHeuristica(Estado estado) {
-		return 1;
+		char miFicha = (jugador().toString() == "JugadorNegras" ? 'N' :'B');
+		char fichaContrario = (jugador().toString() == "JugadorNegras" ? 'B' :'N');
+		
+		Tablero tablero = ((EstadoReversi)(estado)).getTablero();
+		int misFichas = tablero.cantidadFichas(miFicha);
+		int fichasContrario = tablero.cantidadFichas(fichaContrario);
+		return misFichas - fichasContrario;
 	}
 
 	@Override

@@ -12,14 +12,13 @@ import juegos.base.Movimiento;
 public class Tablero {
 
 	private char[][] tablero;
-	
-	//Si el jugador actual es 0, corresponde a las negras,  si es 1 corresponde a las blancas
 	private int jugadorActual;
 	
-	public Tablero(char[][] tablero, int jugadorActual) 
+	
+	public Tablero(char[][] tablero) 
 	{
 		this.tablero = tablero;
-		this.jugadorActual = jugadorActual;
+		
 	}
 	
 	public Tablero(int fila, int columna, int jugadorActual) 
@@ -52,6 +51,10 @@ public class Tablero {
 		return resultado;
 	}
 
+	public int getJugadorActual()
+	{
+		return jugadorActual;
+	}
 
 	public void setCasilla(int fila, int columna, char charAux) 
 	{
@@ -92,26 +95,15 @@ public class Tablero {
 			tablero[unaCasilla.fila()][unaCasilla.columna()] = jugadorMovio;
 		}
 		
-		// Paso al otro jugador como el actual
-		cambiarJugador();
-	}
-	
-	public void cambiarJugador() {
-		if(jugadorActual == 0) {
+		if(jugadorActual == 0)
+		{
 			jugadorActual++;
-		} else {
+		}else
+		{
 			jugadorActual--;
 		}
-		
 	}
 
-	/**
-	 * @return Jugador a Mover.
-	 */
-	public int getJugadorActual() 
-	{
-		return jugadorActual;
-	}
 
 	/**
 	 * Imprime el tablero
@@ -204,14 +196,12 @@ public class Tablero {
 		return false;
 	}
 
-	public boolean hayFichaAdversario(int fila, int columna) 
+	public boolean hayFichaAdversario(int fila, int columna, char jugadorContrario) 
 	{
 		char resultado = getCasilla(fila, columna);
 		if(resultado != ' ')
 		{
-			if(jugadorActual == 0 && resultado == 'B')
-				return true;
-			if(jugadorActual == 1 && resultado == 'N')
+			if(jugadorContrario ==  resultado)
 				return true;
 		}
 		return false;
