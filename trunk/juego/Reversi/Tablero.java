@@ -16,16 +16,16 @@ public class Tablero {
 	//Si el jugador actual es 0, corresponde a las negras,  si es 1 corresponde a las blancas
 	private int jugadorActual;
 	
-	public Tablero(char[][] tablero) 
+	public Tablero(char[][] tablero, int jugadorActual) 
 	{
 		this.tablero = tablero;
-		jugadorActual = 0;
+		this.jugadorActual = jugadorActual;
 	}
 	
-	public Tablero(int fila, int columna) 
+	public Tablero(int fila, int columna, int jugadorActual) 
 	{
 		tablero = new char[fila][columna];
-		jugadorActual = 0;
+		this.jugadorActual = jugadorActual;
 		
 		//Inicializamos el tablero vacio por defecto
 		for (int i = 0; i < tablero.length; i++) {
@@ -219,7 +219,7 @@ public class Tablero {
 
 	public Tablero copiar() {
 		//return (new Tablero(tablero.clone()));
-		Tablero tableroNuevo =  new Tablero(tablero.length,tablero.length);
+		Tablero tableroNuevo =  new Tablero(tablero.length,tablero.length, jugadorActual);
 		
 		for(int fila = 0; fila < tablero.length; fila++)
 		{
