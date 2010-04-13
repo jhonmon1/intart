@@ -83,6 +83,11 @@ public class Reversi extends _Juego {
 			this.tablero = tablero;
 		}
 
+		public Tablero getTablero()
+		{
+			return tablero;
+		}
+		
 		/**
 		 *@return Juego al cual pertenece el estado.
 		 */
@@ -120,19 +125,20 @@ public class Reversi extends _Juego {
 		 */
 		@Override
 		public Movimiento[] movimientos(Jugador jugador) {
-			// Si el jugador no es el que mueve, o ha terminado la partida,
-			// retorna null.
 			
-			int jugadorHabilitado = tablero.getJugadorActual();
-	
-			if (!jugador.equals(jugadores[jugadorHabilitado])) {
-				// || resultado(jugadores[jugadorHabilitado]) != null) {
+			
+			int jugadorMover = gatIndice(jugadores, jugador); 
+			
+			if(tablero.getJugadorActual() != jugadorMover)
+			{
 				return null;
 			}
+			char charJugadorHabilitado = jugadorMover == 0 ? 'N' : 'B';
+			char charJugadorContrario = jugadorMover == 0 ? 'B' : 'N';
 			
 			// Lista de fichas en el tablero para el jugador dado
 			List<Casilla> listaDeFichasEnTablero = tablero.getFichasJugador(
-					(jugadorHabilitado == 0 ? 'N' : 'B'));
+					charJugadorHabilitado);
 			
 			// Lista de fichas donde sería posible colocar
 			List<Casilla> listaDeFichasDondeColocar = tablero.getFichasDondeColocar();
@@ -155,18 +161,20 @@ public class Reversi extends _Juego {
 					//sola y no setear correctamente todas las casillas que cambian
 					//al hacer el movimiento
 					boolean resultado1 = hayMovimientoEnFila(tablero, casillaColocar,
-							casillaEnElTablero, casillasQueCambian);
+							casillaEnElTablero, charJugadorContrario, casillasQueCambian);
 					boolean resultado2 = hayMovimientoEnColumna(tablero, casillaColocar,
-							casillaEnElTablero, casillasQueCambian);
+							casillaEnElTablero, charJugadorContrario, casillasQueCambian);
 					boolean resultado3 = hayMovimientoEnDiagonalNegativa(tablero,
-							casillaColocar, casillaEnElTablero, casillasQueCambian);
+							casillaColocar, casillaEnElTablero, charJugadorContrario, 
+							casillasQueCambian);
 					boolean resultado4 = hayMovimientoEnDiagonalPositiva(tablero,
-							casillaColocar, casillaEnElTablero, casillasQueCambian);
+							casillaColocar, casillaEnElTablero, charJugadorContrario,
+							casillasQueCambian);
 							
 					if (resultado1||resultado2||resultado3||resultado4) 
 					{
 						mov = new MovimientoReversi(casillaColocar.fila(),
-								casillaColocar.columna(), casillasQueCambian);
+								casillaColocar.columna(), jugador, casillasQueCambian);
 						listaMovs.add(mov);
 					}
 				}
@@ -190,6 +198,24 @@ public class Reversi extends _Juego {
 			Utils.ordenarMovimientos(movs);
 			
 			return movs;
+		}
+
+		/*
+		 * Dada la lista de jugadores y un jugador particular devuelve
+		 * el indice de la posicion del jugador en esa lista o -1 en caso
+		 * de no pertencer a la lista
+		 */
+		private int gatIndice(Jugador[] jugadores, Jugador jugador) {
+			int indice = 0;
+			for(Jugador unJugador : jugadores)
+			{
+				if(unJugador.equals(jugador))
+				{
+					return indice;
+				}
+				indice++;
+			}
+			return -1;
 		}
 
 		/**
@@ -253,7 +279,7 @@ public class Reversi extends _Juego {
 		 */
 		private boolean hayMovimientoEnDiagonalNegativa(Tablero tablero,
 				Casilla casillaColocar, Casilla casillaEnElTablero,
-				List<Casilla> casillasQueCambian) {
+				char jugadorContrario, List<Casilla> casillasQueCambian) {
 
 			List<Casilla> casillasQueCambianAux = new ArrayList<Casilla>();
 
@@ -280,7 +306,7 @@ public class Reversi extends _Juego {
 				for (int filaActual = filaInicio + 1; filaActual < filaFinal; filaActual++) {
 					columnaInicio += 1;
 					// Si no hay ficha de adversario -> no se puede mover
-					if (!tablero.hayFichaAdversario(filaActual, columnaInicio)) {
+					if (!tablero.hayFichaAdversario(filaActual, columnaInicio, jugadorContrario)) {
 						return false;
 					}
 
@@ -305,7 +331,7 @@ public class Reversi extends _Juego {
 		 */
 		private boolean hayMovimientoEnDiagonalPositiva(Tablero tablero,
 				Casilla casillaColocar, Casilla casillaEnElTablero,
-				List<Casilla> casillasQueCambian) {
+				char jugadorContrario, List<Casilla> casillasQueCambian) {
 
 			if (Utils.mismaDiagonalPositiva(casillaColocar, casillaEnElTablero)) {
 
@@ -333,7 +359,7 @@ public class Reversi extends _Juego {
 				for (int filaActual = filaInicio - 1; filaActual > filaFinal; filaActual--) {
 					columnaInicio += 1;
 					// Si no hay ficha de adversario -> no se puede mover
-					if (!tablero.hayFichaAdversario(filaActual, columnaInicio)) {
+					if (!tablero.hayFichaAdversario(filaActual, columnaInicio, jugadorContrario)) {
 						return false;
 					}
 
@@ -363,7 +389,7 @@ public class Reversi extends _Juego {
 		 */
 		private boolean hayMovimientoEnColumna(Tablero tablero,
 				Casilla casillaColocar, Casilla casillaEnElTablero,
-				List<Casilla> casillasQueCambian) {
+				char jugadorContrario, List<Casilla> casillasQueCambian) {
 
 			if (Utils.mismaColumna(casillaColocar, casillaEnElTablero)) {
 
@@ -386,7 +412,7 @@ public class Reversi extends _Juego {
 				// Verificamos que en la misma columna entre las dos filas solo
 				// haya fichas del adversario
 				for (int i = fil1 + 1; i < fil2; i++) {
-					if (!tablero.hayFichaAdversario(i, casillaColocar.columna()))
+					if (!tablero.hayFichaAdversario(i, casillaColocar.columna(), jugadorContrario))
 						return false;
 
 					// Agregamos ésta casilla ya que debería cambiar al agregar
@@ -415,7 +441,7 @@ public class Reversi extends _Juego {
 		 */
 		private boolean hayMovimientoEnFila(Tablero tablero,
 				Casilla casillaColocar, Casilla casillaEnElTablero,
-				List<Casilla> casillasQueCambian) {
+				char jugadorContrario, List<Casilla> casillasQueCambian) {
 
 			if (Utils.mismaFila(casillaColocar, casillaEnElTablero)) {
 
@@ -438,7 +464,7 @@ public class Reversi extends _Juego {
 				// Verificamos que en la misma fila entre las dos columnas solo
 				// haya fichas del adversario
 				for (int i = col1 + 1; i < col2; i++) {
-					if (!tablero.hayFichaAdversario(casillaColocar.fila(), i))
+					if (!tablero.hayFichaAdversario(casillaColocar.fila(), i, jugadorContrario))
 						return false;
 
 					// Agregamos ésta casilla ya que debería cambiar al agregar
@@ -465,12 +491,12 @@ public class Reversi extends _Juego {
 			public List<Casilla> casillasQueCambian;
 			public Jugador jugador;
 
-			public MovimientoReversi(int newFila, int newColumna,
+			public MovimientoReversi(int newFila, int newColumna, Jugador jugador,
 					List<Casilla> casillasQueCambian) {
 				this.newFila = newFila;
 				this.newColumna = newColumna;
 				this.casillasQueCambian = casillasQueCambian;
-				jugador =  jugadores[tablero.getJugadorActual()];
+				this.jugador =  jugador; //tablero.getJugadorActual()];
 			}
 			
 			@Override
@@ -513,16 +539,17 @@ public class Reversi extends _Juego {
 		Agente agenteAleatorio1 = new AgenteAleatorio(System.out);
 		Agente agenteAleatorio2 = new AgenteAleatorio();
 		Agente agenteConsola = new AgenteConsola();
-		Agente agenteHeuristico1 = new AgenteHeuristico1(5);
+		Agente agenteHeuristico1 = new AgenteHeuristico1(2);
 		
 		Agente a1;
 		Agente a2;
 		
 		a1 = agenteAleatorio1;
+		a1 = agenteConsola;
 		a1 = agenteHeuristico1;
 		
 		a2 = agenteAleatorio2;
-		a2 = agenteConsola;
+		a2 = agenteAleatorio1;
 		
 		System.out.println(Partida.completa(Reversi.JUEGO, a1, a2).toString());
 	}

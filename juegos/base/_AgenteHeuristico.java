@@ -19,7 +19,7 @@ public abstract class _AgenteHeuristico implements Agente{
 		//los movimientos posibles para un estado
 		for(Movimiento movimiento : movimientos){
 			estadoAux = estado.copiar();
-			valorAux = alfaBeta(estadoAux.siguiente(movimiento), Double.MIN_VALUE, Double.MAX_VALUE ,niveles-1, cambiar(indiceJugador), indiceJugador);
+			valorAux = alfaBeta(estadoAux.siguiente(movimiento), Double.MIN_VALUE, Double.MAX_VALUE ,niveles, cambiar(indiceJugador), indiceJugador);
 			if(valorAux > eleccion)
 			{
 				eleccion = valorAux;
@@ -50,10 +50,11 @@ public abstract class _AgenteHeuristico implements Agente{
 		{
 			for(Movimiento movimiento : movimientos)
 			{
-				double valor = alfaBeta(estado.siguiente(movimiento), 
+				estadoAux = estado.copiar();
+				double valor = alfaBeta(estadoAux.siguiente(movimiento), 
 						alfa, beta, niveles-1,cambiar(jugador),jugadorMaximiza);
 				
-				if(valor<alfa)
+				if(valor>alfa)
 				{ 	alfa = valor;} //Encontramos un nuevo mejor movimiento 
 				
 				if(alfa>= beta)
@@ -67,7 +68,8 @@ public abstract class _AgenteHeuristico implements Agente{
 		else
 		{	for(Movimiento movimiento : movimientos)
 			{
-				double valor = alfaBeta(estado.siguiente(movimiento), 
+				estadoAux = estado.copiar();
+				double valor = alfaBeta(estadoAux.siguiente(movimiento), 
 						alfa, beta, niveles-1,cambiar(jugador),jugadorMaximiza);
 				
 				if(valor<beta)
@@ -115,6 +117,6 @@ public abstract class _AgenteHeuristico implements Agente{
 		Movimiento[] movs = estado.movimientos(jugador());
 		int indiceJugador = obtenerJugador(estado.jugadores(), jugador());
 		
-		return miniMax(estado,movs,5,indiceJugador);
+		return miniMax(estado,movs,niveles(),indiceJugador);
 	}
 }
