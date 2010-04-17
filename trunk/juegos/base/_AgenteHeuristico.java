@@ -1,5 +1,9 @@
 package juegos.base;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 
 public abstract class _AgenteHeuristico implements Agente{
 
@@ -10,8 +14,9 @@ public abstract class _AgenteHeuristico implements Agente{
 	public  Movimiento miniMax(Estado estado, Movimiento[] movimientos, int niveles, int indiceJugador)
 	{
 		Movimiento movimientoDevolver = null;		
-		double eleccion = Double.MIN_VALUE;
+		double eleccion = Double.NEGATIVE_INFINITY;
 		double valorAux;
+		List<Movimiento> mejoresMovimientos = new ArrayList<Movimiento>();
 
 		Estado estadoAux;
 		
@@ -19,19 +24,33 @@ public abstract class _AgenteHeuristico implements Agente{
 		//los movimientos posibles para un estado
 		for(Movimiento movimiento : movimientos){
 			estadoAux = estado.copiar();
-			valorAux = alfaBeta(estadoAux.siguiente(movimiento), Double.MIN_VALUE, Double.MAX_VALUE ,niveles, cambiar(indiceJugador), indiceJugador);
-			if(valorAux > eleccion)
+			valorAux = alfaBeta(estadoAux.siguiente(movimiento), Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY ,niveles, cambiar(indiceJugador), indiceJugador);
+			if(valorAux == eleccion)
 			{
-				eleccion = valorAux;
-				movimientoDevolver = movimiento;
-			}
+				mejoresMovimientos.add(movimiento);
+				
+			}else
+					if(valorAux > eleccion)
+					{
+						mejoresMovimientos = new ArrayList<Movimiento>();
+						mejoresMovimientos.add(movimiento);
+						eleccion = valorAux;
+					}			
 		}
 		
-		return movimientoDevolver;
+		int indice = getIndiceAleatorio(mejoresMovimientos);
+		return mejoresMovimientos.get(indice);
 	
 	}
 	
 	
+	private int getIndiceAleatorio(List<Movimiento> mejoresMovimientos) {
+		int largoLista = mejoresMovimientos.size();
+		Random rndm = new Random();
+		int indice = rndm.nextInt(largoLista);
+		return indice;
+	}
+
 	public double alfaBeta(Estado estado, double alfa, double beta, int niveles, int jugador, int jugadorMaximiza)
 	{
 		if(niveles == 0 || estado.esFinal())

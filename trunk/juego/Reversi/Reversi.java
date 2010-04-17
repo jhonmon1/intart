@@ -20,8 +20,8 @@ public class Reversi extends _Juego {
 	public static final String[] FILAS = { "1", "2", "3", "4", "5", "6", "7", "8" };
 	public static final String[] COLUMNAS = { "A", "B", "C", "D", "E", "F",	"G", "H" };
 
-	// Creamos un juego reversi para 2 Jugadoresm, uno fichas negras y otro
-	// fichas balncas
+	// Creamos un juego reversi para 2 Jugadores, uno fichas negras y otro
+	// fichas balncas.
 	private Reversi() {
 		super("Reversi", "JugadorNegras", "JugadorBlancas");
 	}
@@ -491,12 +491,20 @@ public class Reversi extends _Juego {
 			public List<Casilla> casillasQueCambian;
 			public Jugador jugador;
 
+			/**
+			 * Creamos un movimiento de una nueva posicion para un determinado jugador
+			 * @param newFila  Nueva fila del movimiento	
+			 * @param newColumna Columna del movimiento
+			 * @param jugador	Jugador al cual corresponde el movimiento
+			 * @param casillasQueCambian Casillas que cambian al realizar el movimiento 
+			 * en el tablero.
+			 */
 			public MovimientoReversi(int newFila, int newColumna, Jugador jugador,
 					List<Casilla> casillasQueCambian) {
 				this.newFila = newFila;
 				this.newColumna = newColumna;
 				this.casillasQueCambian = casillasQueCambian;
-				this.jugador =  jugador; //tablero.getJugadorActual()];
+				this.jugador =  jugador;
 			}
 			
 			@Override
@@ -539,17 +547,18 @@ public class Reversi extends _Juego {
 		Agente agenteAleatorio1 = new AgenteAleatorio(System.out);
 		Agente agenteAleatorio2 = new AgenteAleatorio();
 		Agente agenteConsola = new AgenteConsola();
-		Agente agenteHeuristico1 = new AgenteHeuristico1(2);
+		Agente agenteHeuristico1 = new AgenteHeuristico1(1);
+		Agente agenteHeuristico2 = new AgenteHeuristico1(5);
 		
 		Agente a1;
 		Agente a2;
 		
 		a1 = agenteAleatorio1;
 		a1 = agenteConsola;
-		a1 = agenteHeuristico1;
 		
-		a2 = agenteAleatorio2;
 		a2 = agenteAleatorio1;
+		a2 = agenteConsola;
+		a2 = agenteHeuristico2;
 		
 		System.out.println(Partida.completa(Reversi.JUEGO, a1, a2).toString());
 	}
