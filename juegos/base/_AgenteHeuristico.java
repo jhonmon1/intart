@@ -12,8 +12,7 @@ public abstract class _AgenteHeuristico implements Agente{
 	public abstract double darHeuristica(Estado estado);
 	
 	public  Movimiento miniMax(Estado estado, Movimiento[] movimientos, int niveles, int indiceJugador)
-	{
-		Movimiento movimientoDevolver = null;		
+	{		
 		double eleccion = Double.NEGATIVE_INFINITY;
 		double valorAux;
 		List<Movimiento> mejoresMovimientos = new ArrayList<Movimiento>();
