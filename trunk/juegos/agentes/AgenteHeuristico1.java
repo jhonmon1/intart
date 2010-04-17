@@ -9,13 +9,16 @@ import juego.Reversi.Reversi.EstadoReversi;
 import juegos.base.*;
 
 
-public class AgenteHeuristico1 extends _AgenteHeuristico
-{
+public class AgenteHeuristico1 extends _AgenteHeuristico {
 	private Jugador jugador;
 	private PrintStream output = null;
 	private int niveles;
 	
 
+	/**
+	 * Constructor de AgenteHeuristico1
+	 * @param niveles: niveles de recursión
+	 */
 	public AgenteHeuristico1(int niveles) 
 	{
 		super();

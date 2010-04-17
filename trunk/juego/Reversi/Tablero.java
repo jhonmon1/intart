@@ -79,20 +79,23 @@ public class Tablero {
 	 */
 	public void actualizarTablero(Movimiento movimiento) 
 	{
-		MovimientoReversi mov = (MovimientoReversi) movimiento;
-		char jugadorMovio = 'B';
-		//Establecemos el jugador que mueve
-		if(mov.jugador().toString().equals(Reversi.nombreJugadorNegras)) { //Si el jugador que movió son negras
-			jugadorMovio = 'N';
-		}
-		//Pongo ficha del judagor que movió en nueva posición
-		tablero[mov.newFila][mov.newColumna] = jugadorMovio; 
-		
-		//Actualizamos las casillas correspondientes
-		List<Casilla> casillasQueCambian = mov.casillasQueCambian;
-		for(Casilla unaCasilla : casillasQueCambian)
+		if(movimiento != null)
 		{
-			tablero[unaCasilla.fila()][unaCasilla.columna()] = jugadorMovio;
+			MovimientoReversi mov = (MovimientoReversi) movimiento;
+			char jugadorMovio = 'B';
+			//Establecemos el jugador que mueve
+			if(mov.jugador().toString().equals(Reversi.nombreJugadorNegras)) { //Si el jugador que movió son negras
+				jugadorMovio = 'N';
+			}
+			//Pongo ficha del judagor que movió en nueva posición
+			tablero[mov.newFila][mov.newColumna] = jugadorMovio; 
+			
+			//Actualizamos las casillas correspondientes
+			List<Casilla> casillasQueCambian = mov.casillasQueCambian;
+			for(Casilla unaCasilla : casillasQueCambian)
+			{
+				tablero[unaCasilla.fila()][unaCasilla.columna()] = jugadorMovio;
+			}
 		}
 		
 		if(jugadorActual == 0)
