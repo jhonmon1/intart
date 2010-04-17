@@ -15,9 +15,7 @@ public class AgenteHeuristico1 extends _AgenteHeuristico
 	private PrintStream output = null;
 	private int niveles;
 	
-	/** Agente aleatorio, iniciando el generador de números pseudoaleatorios con
-	 *  la semilla dada.  
-	 */
+
 	public AgenteHeuristico1(int niveles) 
 	{
 		super();
@@ -48,7 +46,7 @@ public class AgenteHeuristico1 extends _AgenteHeuristico
 	}
 	
 	@Override public String toString() {
-		return String.format("Agente Heuristico 1", " - ");
+		return String.format("Agente Heuristico" + jugador.toString());
 	}
 
 	@Override
@@ -66,6 +64,4 @@ public class AgenteHeuristico1 extends _AgenteHeuristico
 	public int niveles() {
 		return niveles;
 	}
-
-
 }
