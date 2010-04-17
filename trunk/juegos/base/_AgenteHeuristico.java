@@ -52,9 +52,15 @@ public abstract class _AgenteHeuristico implements Agente{
 
 	public double alfaBeta(Estado estado, double alfa, double beta, int niveles, int jugador, int jugadorMaximiza)
 	{
-		if(niveles == 0 || estado.esFinal())
+		if(niveles == 0)
 		{
 			return darHeuristica(estado);
+		}
+		
+		//Si es un estado final devolvemos el mayor valor valor para ésta heristica posible
+		if(estado.esFinal())
+		{
+			return 64;
 		}
 		
 		Estado estadoAux = estado.copiar();
