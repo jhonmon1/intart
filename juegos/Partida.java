@@ -1,6 +1,8 @@
 package juegos;
 
 import java.util.*;
+
+import juego.Reversi.Reversi.EstadoReversi;
 import juegos.base.*;
 
 /** Controlador básico de una partida. 
@@ -123,6 +125,9 @@ public class Partida {
 				.append('\t').append(String.format("%8.4f", resultados[i]))
 				.append('\n');
 		}
+		
+		buffer.append("Fichas negras " + ((EstadoReversi)actual).getTablero().cantidadFichas('N') + '\n');
+		buffer.append("Fichas blancas " + ((EstadoReversi)actual).getTablero().cantidadFichas('B') + '\n');
 		return buffer.toString();
 	}
 	

@@ -36,6 +36,7 @@ public class Reversi extends _Juego {
 		tablero.setCasilla(3, 4, 'N');
 		tablero.setCasilla(4, 3, 'N');
 		tablero.setCasilla(4, 4, 'B');
+		
 		return new EstadoReversi(tablero);
 	}
 
@@ -79,7 +80,7 @@ public class Reversi extends _Juego {
 
 		public final Tablero tablero;
 
-		public EstadoReversi(Tablero tablero) {
+		public EstadoReversi(Tablero tablero) {			
 			this.tablero = tablero;
 		}
 
@@ -180,8 +181,10 @@ public class Reversi extends _Juego {
 				}
 			}
 
-			// En caso de no haber movimientos retorna null
+			// En caso de no haber movimientos actualiza el tablero cambiando el jugador 
+			// actual al siguiente y retorna null como movimiento
 			if (listaMovs.size() == 0) {
+				tablero.actualizarTablero(null);
 				return null;
 			}
 
@@ -542,25 +545,10 @@ public class Reversi extends _Juego {
 		}
 	}
 
-	public static void main(String[] args) throws Exception 
-	{
-		Agente agenteAleatorio1 = new AgenteAleatorio(System.out);
-		Agente agenteAleatorio2 = new AgenteAleatorio();
-		Agente agenteConsola = new AgenteConsola();
-		Agente agenteHeuristico1 = new AgenteHeuristico1(1);
-		Agente agenteHeuristico2 = new AgenteHeuristico1(5);
+	public static void main(String[] args) throws Exception {
+		AgenteHeuristico1 agenteH1 = new AgenteHeuristico1(3);
+		AgenteHeuristicoDificil agenteHD = new AgenteHeuristicoDificil(3);
 		
-		Agente a1;
-		Agente a2;
-		
-		a1 = agenteAleatorio1;
-		a1 = agenteConsola;
-		
-		a2 = agenteAleatorio1;
-		a2 = agenteConsola;
-		a2 = agenteHeuristico2;
-		
-		System.out.println(Partida.completa(Reversi.JUEGO, a1, a2).toString());
+		System.out.println(Partida.completa(Reversi.JUEGO, agenteH1, agenteHD).toString());
 	}
-
 }
