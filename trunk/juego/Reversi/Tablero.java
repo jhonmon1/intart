@@ -114,8 +114,13 @@ public class Tablero {
 	 */
 	public String imprimirse() 
 	{
-		String tabla = "  A  B  C  D  E  F  G  H \n" + 
-						"+--+--+--+--+--+--+--+--+ \n";
+		StringBuilder builder = new StringBuilder();
+		builder.append('\n')
+				.append(" A  B  C  D  E  F  G  H")
+				.append('\n')
+				.append("+--+--+--+--+--+--+--+--+")
+				.append('\n');
+				
 		char resultado;
 		
 		for (int i = 0; i < tablero.length; i++) 
@@ -123,12 +128,14 @@ public class Tablero {
 			for (int j = 0; j < tablero[0].length; j++) 
 			{
 				resultado = getCasilla(i, j);
-				tabla = tabla + "|" + resultado + " ";
+				builder.append("|" + resultado + " ");
 			}
-			tabla = tabla + "|"+ (i+1) + "\n";
-			tabla = tabla + "+--+--+--+--+--+--+--+--+ \n";
+			builder.append("|"+ (i+1))
+			.append('\n')
+			.append("+--+--+--+--+--+--+--+--+")
+			.append('\n');
 		}
-		return tabla;
+		return builder.toString();
 	}
 
 	/**

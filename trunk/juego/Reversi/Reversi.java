@@ -547,8 +547,9 @@ public class Reversi extends _Juego {
 
 	public static void main(String[] args) throws Exception {
 		AgenteHeuristico1 agenteH1 = new AgenteHeuristico1(3);
-		AgenteHeuristicoDificil agenteHD = new AgenteHeuristicoDificil(3);
+		AgenteHeuristicoDificil agenteHD = new AgenteHeuristicoDificil(3, System.out);
+		AgenteAleatorio aleatario = new AgenteAleatorio();
 		
-		System.out.println(Partida.completa(Reversi.JUEGO, agenteH1, agenteHD).toString());
+		System.out.println(Partida.completa(Reversi.JUEGO, aleatario, agenteHD).toString());
 	}
 }

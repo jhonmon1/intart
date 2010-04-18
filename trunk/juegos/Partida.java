@@ -126,10 +126,19 @@ public class Partida {
 				.append('\n');
 		}
 		
-		buffer.append("Fichas negras " + ((EstadoReversi)actual).getTablero().cantidadFichas('N') + '\n');
-		buffer.append("Fichas blancas " + ((EstadoReversi)actual).getTablero().cantidadFichas('B') + '\n');
+		buffer.append("Fichas")
+			.append('\t').append("Negras :")
+			.append('\t').append(((EstadoReversi)actual).getTablero().cantidadFichas('N'))
+			.append('\n')
+			.append("Fichas")
+			.append('\t').append("Blancas:")
+			.append('\t').append(((EstadoReversi)actual).getTablero().cantidadFichas('B'))
+			.append('\n');
 		return buffer.toString();
 	}
+	
+	public void generarHtml()
+	{}
 	
 ////////////////////////////////////////////////////////////////////////////////
 

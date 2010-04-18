@@ -101,6 +101,6 @@ public class AgenteConsola implements Agente {
 	}
 	
 	@Override public String toString() {
-		return "AgenteConsola()";
+		return "AgenteConsola";
 	}
 }

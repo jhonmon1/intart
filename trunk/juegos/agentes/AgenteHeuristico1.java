@@ -25,6 +25,13 @@ public class AgenteHeuristico1 extends _AgenteHeuristico {
 		this.niveles = niveles;
 	}
 	
+	public AgenteHeuristico1(int niveles, PrintStream output) 
+	{
+		super();
+		this.niveles = niveles;
+		this.output = output;
+	}
+	
 	@Override public Jugador jugador() {
 		return jugador;
 	}
@@ -45,11 +52,13 @@ public class AgenteHeuristico1 extends _AgenteHeuristico {
 	}
 	
 	protected void printEstado(Estado estado) {
-		output.println("\t"+ estado.toString().replace("\n", "\n\t"));
+		if(output != null){
+			output.println("\t"+ estado.toString().replace("\n", "\n\t"));
+		}
 	}
 	
 	@Override public String toString() {
-		return String.format("Agente Heuristico" + jugador.toString());
+		return String.format("Agente Heuristico Basico " + jugador.toString());
 	}
 
 	@Override
