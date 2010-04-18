@@ -1,6 +1,10 @@
 package juegos.agentes;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+
 import juego.Reversi.Tablero;
 import juego.Reversi.Reversi.EstadoReversi;
 import juegos.base.Estado;
@@ -18,6 +22,8 @@ public class AgenteHeuristicoDificil extends _AgenteHeuristico {
 	private Jugador jugador;
 	private PrintStream output = null;
 	private int niveles;	
+	private boolean generarSalida;
+	private String stringJugada;
 
 	/**
 	 * Constructor de AgenteHeuristicoDificil
@@ -28,6 +34,14 @@ public class AgenteHeuristicoDificil extends _AgenteHeuristico {
 		super();
 		this.niveles = niveles;
 	}
+	
+	public AgenteHeuristicoDificil(int niveles, boolean generarSalida) 
+	{
+		super();
+		this.niveles = niveles;
+		this.generarSalida = generarSalida;
+	}
+	
 	
 	public AgenteHeuristicoDificil(int niveles, PrintStream output) 
 	{
@@ -42,17 +56,39 @@ public class AgenteHeuristicoDificil extends _AgenteHeuristico {
 	
 	@Override public void comienzo(Jugador jugador, Estado estado) {
 		this.jugador = jugador;	
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append("<html><head><title>Reversi ( Balsa - Chabkinian - Rosso)</title></head><body><p><h1>Partida: </h1></p><p/>");
+		
+		stringJugada = builder.toString();
 	}
 	
 	@Override public void fin(Estado estado) {
-		// No hay implementación.
+		StringBuilder builder = new StringBuilder();
+		builder.append("</body></html>");
+		stringJugada += builder.toString();
+		
+		try {
+		    FileWriter fw = new FileWriter("Reversi.html");
+		    BufferedWriter bw = new BufferedWriter(fw);
+		    PrintWriter salida = new PrintWriter(bw);
+		    salida.println(stringJugada);
+		    salida.close();
+		}
+		catch(Exception ioex) {
+		  System.out.println("Error: "+ioex.toString());
+		}
 	}
+	
+	
 	
 	@Override public void movimiento(Movimiento movimiento, Estado estado) {
 		if(output != null){
 			output.println(String.format("Jugador %s mueve %s.", movimiento.jugador(), movimiento));
 			printEstado(estado);
 		}
+		stringJugada += String.format("<p/><p><b> Jugador %s mueve %s. </b></p><p/>", movimiento.jugador(), movimiento);
+		stringJugada += ((EstadoReversi)estado).tablero.salidaHTML();
 	}
 	
 	protected void printEstado(Estado estado) {
