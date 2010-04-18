@@ -137,6 +137,42 @@ public class Tablero {
 		}
 		return builder.toString();
 	}
+	
+	public String salidaHTML()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("<table style='font-size:28.0pt;text-align:center'>")
+			   .append("<table border cellpadding=3>");
+		
+
+		for (int i = 0; i < tablero.length; i++) 
+		{
+			builder.append("<tr>");
+			for (int j = 0; j < tablero[0].length; j++) 
+			{
+				builder.append("<td>")
+				.append(getCaracter(i,j))
+				.append("</td>");
+			}
+		}
+		
+		builder.append("</table>");
+		builder.append("<br>");
+		
+		return builder.toString();
+	}
+
+	private String getCaracter(int i, int j) {
+		char ficha = tablero[i][j];
+		if(ficha == 'N')
+		{ 	return "&#9818;"; }
+		else{ 
+			if(ficha == 'B')
+			{  return "&#9812;"; }
+			else
+			{ return "&nbsp;&nbsp;&nbsp;&nbsp;"; }
+		}
+	}
 
 	/**
 	 * @return lista de casillas en donde hay fichas del jugador actual
