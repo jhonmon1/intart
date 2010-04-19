@@ -98,15 +98,24 @@ public class Tablero {
 			}
 		}
 		
+		cambiarTurno();
+	}
+
+
+	public void cambiarTurno() {
 		if(jugadorActual == 0)
 		{
 			jugadorActual++;
 		}else
 		{
 			jugadorActual--;
-		}
+		}	
 	}
-
+	
+	public void setJugadorActual(int jugadorActual)
+	{
+		this.jugadorActual = jugadorActual;
+	}
 
 	/**
 	 * Imprime el tablero

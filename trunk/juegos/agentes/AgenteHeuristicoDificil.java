@@ -22,7 +22,6 @@ public class AgenteHeuristicoDificil extends _AgenteHeuristico {
 	private Jugador jugador;
 	private PrintStream output = null;
 	private int niveles;	
-	private boolean generarSalida;
 	private String stringJugada;
 
 	/**
@@ -34,14 +33,6 @@ public class AgenteHeuristicoDificil extends _AgenteHeuristico {
 		super();
 		this.niveles = niveles;
 	}
-	
-	public AgenteHeuristicoDificil(int niveles, boolean generarSalida) 
-	{
-		super();
-		this.niveles = niveles;
-		this.generarSalida = generarSalida;
-	}
-	
 	
 	public AgenteHeuristicoDificil(int niveles, PrintStream output) 
 	{

@@ -267,12 +267,18 @@ public class Reversi extends _Juego {
 		 *         jugador existe al menos un movimiento.
 		 */
 		public boolean esFinal() {
-			Jugador[] todosLosJugadores = this.jugadores();
+			Jugador[] todosLosJugadores = jugadores();
+			int actualAux = tablero.getJugadorActual();
+			int aux;
 			for (Jugador unJugador : todosLosJugadores) {
+				aux = unJugador.toString().equals("JugadorNegras") ? 0 : 1;
+				tablero.setJugadorActual(aux);
 				if (movimientos(unJugador) != null) {
+					tablero.setJugadorActual(actualAux);
 					return false;
 				}
 			}
+			tablero.setJugadorActual(actualAux);
 			return true;
 		}
 
@@ -550,6 +556,6 @@ public class Reversi extends _Juego {
 		AgenteHeuristicoDificil agenteHD = new AgenteHeuristicoDificil(3);
 		AgenteAleatorio aleatario = new AgenteAleatorio();
 		
-		System.out.println(Partida.completa(Reversi.JUEGO, aleatario, agenteHD).toString());
+		System.out.println(Partida.completa(Reversi.JUEGO, agenteH1, agenteHD).toString());
 	}
 }
