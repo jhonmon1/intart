@@ -1,4 +1,4 @@
-package juegos;
+package juegos.partida;
 
 import java.util.*;
 
