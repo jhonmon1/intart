@@ -104,8 +104,10 @@ public abstract class _AgenteHeuristico implements Agente{
 					{	return alfa; }// Se hace la poda
 	
 				}
+				return alfa; // Mejor movimiento para el jugador actual
 			}
-			return alfa; // Mejor movimiento para el jugador actual
+			
+			return alfaBeta(estadoAux,alfa,beta,niveles,cambiar(jugador),jugadorMaximiza);
 
 		  //El jugador actual es el que minimiza
 		} else {
@@ -122,8 +124,10 @@ public abstract class _AgenteHeuristico implements Agente{
 					{	return beta; } //Se hace la poda
 	
 				}
-			}
-			return beta; //Mejor movimiento para el oponente			
+				return beta; //Mejor movimiento para el oponente
+			}	
+			return alfaBeta(estadoAux,alfa,beta,niveles,cambiar(jugador),jugadorMaximiza);
+
 		}
 	}
 	
