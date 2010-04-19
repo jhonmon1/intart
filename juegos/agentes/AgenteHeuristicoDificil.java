@@ -5,8 +5,8 @@ import java.io.FileWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
-import juego.Reversi.Tablero;
-import juego.Reversi.Reversi.EstadoReversi;
+import juegos.Reversi.Tablero;
+import juegos.Reversi.Reversi.EstadoReversi;
 import juegos.base.Estado;
 import juegos.base.Jugador;
 import juegos.base.Movimiento;

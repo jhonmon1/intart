@@ -2,7 +2,7 @@ package juegos;
 
 import java.util.*;
 
-import juego.Reversi.Reversi.EstadoReversi;
+import juegos.Reversi.Reversi.EstadoReversi;
 import juegos.base.*;
 
 /** Controlador básico de una partida. 
@@ -42,17 +42,19 @@ public class Partida {
 	 */
 	public Movimiento jugada() {
 		if (resultados == null) { // La partida no se ha terminado.
-			for (Agente agente : agentes) {
-				Movimiento[] movs = actual.movimientos(agente.jugador());
-				// Supone un solo agente habilitado por vez.
-				if (movs != null && movs.length > 0) {
-					Movimiento accion = agente.decision(actual);
-					actual = actual.siguiente(accion);
-					for (int i = 0; i < agentes.length; i++) {
-						agentes[i].movimiento(accion, actual);
+			while(!actual.esFinal()){
+				for (Agente agente : agentes) {
+					Movimiento[] movs = actual.movimientos(agente.jugador());
+					// Supone un solo agente habilitado por vez.
+					if (movs != null && movs.length > 0) {
+						Movimiento accion = agente.decision(actual);
+						actual = actual.siguiente(accion);
+						for (int i = 0; i < agentes.length; i++) {
+							agentes[i].movimiento(accion, actual);
+						}
+						movimientos.add(accion);
+						return accion;
 					}
-					movimientos.add(accion);
-					return accion;
 				}
 			}
 			resultados = new double[agentes.length];
@@ -61,7 +63,7 @@ public class Partida {
 				agentes[i].fin(actual);
 			}
 			return null;
-		} else {
+		}else {
 			throw new RuntimeException("¡La partida ha terminado!");
 		}
 	}

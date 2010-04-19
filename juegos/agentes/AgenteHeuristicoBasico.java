@@ -4,12 +4,12 @@ package juegos.agentes;
 import java.io.PrintStream;
 
 
-import juego.Reversi.Tablero;
-import juego.Reversi.Reversi.EstadoReversi;
+import juegos.Reversi.Tablero;
+import juegos.Reversi.Reversi.EstadoReversi;
 import juegos.base.*;
 
 
-public class AgenteHeuristico1 extends _AgenteHeuristico {
+public class AgenteHeuristicoBasico extends _AgenteHeuristico {
 	private Jugador jugador;
 	private PrintStream output = null;
 	private int niveles;
@@ -19,13 +19,13 @@ public class AgenteHeuristico1 extends _AgenteHeuristico {
 	 * Constructor de AgenteHeuristico1
 	 * @param niveles: niveles de recursión
 	 */
-	public AgenteHeuristico1(int niveles) 
+	public AgenteHeuristicoBasico(int niveles) 
 	{
 		super();
 		this.niveles = niveles;
 	}
 	
-	public AgenteHeuristico1(int niveles, PrintStream output) 
+	public AgenteHeuristicoBasico(int niveles, PrintStream output) 
 	{
 		super();
 		this.niveles = niveles;
