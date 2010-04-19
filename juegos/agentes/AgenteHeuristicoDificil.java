@@ -7,10 +7,7 @@ import java.io.PrintWriter;
 
 import juegos.Reversi.Tablero;
 import juegos.Reversi.Reversi.EstadoReversi;
-import juegos.base.Estado;
-import juegos.base.Jugador;
-import juegos.base.Movimiento;
-import juegos.base._AgenteHeuristico;
+import juegos.base.*;
 
 /**
  * Implementación de un agente heurístico con un nivel de 
