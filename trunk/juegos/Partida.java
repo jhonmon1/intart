@@ -1,9 +1,10 @@
-package juegos.partida;
+package juegos;
 
 import java.util.*;
 
 import juegos.Reversi.Reversi.EstadoReversi;
 import juegos.base.*;
+
 
 /** Controlador básico de una partida. 
  */

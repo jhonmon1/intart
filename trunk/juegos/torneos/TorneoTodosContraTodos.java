@@ -1,11 +1,11 @@
 package juegos.torneos;
 
+import juegos.Partida;
 import juegos.Reversi.*;
 import juegos.agentes.AgenteAleatorio;
 import juegos.agentes.AgenteHeuristicoBasico;
 import juegos.agentes.AgenteHeuristicoDificil;
 import juegos.base.*;
-import juegos.partida.Partida;
 
 /** Torneo que hace jugar a todos los agentes contra todos los agentes, jugando
  *  con todos los jugadores, repetido una cierta cantidad de veces.  
