@@ -31,4 +31,5 @@ public interface Agente {
      *  que se pasa por parámetro.
      */
     public void fin(Estado estado);
+
 }

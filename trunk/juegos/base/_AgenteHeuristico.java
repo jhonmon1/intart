@@ -79,7 +79,7 @@ public abstract class _AgenteHeuristico implements Agente{
 		//Si es un estado final se devuelve el mayor valor para esta heurística posible
 		if(estado.esFinal())
 		{
-			return 64;
+			return maximoValorHeuristica();
 		}
 		
 		Estado estadoAux = estado.copiar();
@@ -131,6 +131,8 @@ public abstract class _AgenteHeuristico implements Agente{
 		}
 	}
 	
+	public abstract double maximoValorHeuristica();
+
 	private Jugador obtenerJugador(Jugador[] jugadores, int jugador) {
 		return jugadores[jugador];
 	}

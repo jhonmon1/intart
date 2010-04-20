@@ -70,11 +70,11 @@ public class TorneoTodosContraTodos extends _Torneo {
 	
 ////////////////////////////////////////////////////////////////////////////////
 	
-	/** Prueba rápida con un torneo de Tateti entre dos jugadores aleatorios. 
+	/** Prueba rápida con un torneo. 
 	 */
 	public static void main(String[] args) throws Exception {
-		Torneo torneo = new TorneoTodosContraTodos(20, Reversi.JUEGO, 
-			 new AgenteAleatorio(), new AgenteHeuristicoBasico(3), new AgenteHeuristicoDificil(3));
+		Torneo torneo = new TorneoTodosContraTodos(100, Reversi.JUEGO, 
+			 new AgenteAleatorio(), new AgenteHeuristicoBasico(4), new AgenteHeuristicoDificil(4));
 		int cantidadPartidas = torneo.completar();
 		System.out.println(torneo);
 		System.out.println("Total de partidas = "+ cantidadPartidas);
