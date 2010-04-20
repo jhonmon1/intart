@@ -164,4 +164,9 @@ public class AgenteHeuristicoDificil extends _AgenteHeuristico {
 	public int niveles() {
 		return niveles;
 	}
+
+	@Override
+	public double maximoValorHeuristica() {
+		return 64;
+	}
 }
