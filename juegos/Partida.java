@@ -43,19 +43,17 @@ public class Partida {
 	 */
 	public Movimiento jugada() {
 		if (resultados == null) { // La partida no se ha terminado.
-			while(!actual.esFinal()){
-				for (Agente agente : agentes) {
-					Movimiento[] movs = actual.movimientos(agente.jugador());
-					// Supone un solo agente habilitado por vez.
-					if (movs != null && movs.length > 0) {
-						Movimiento accion = agente.decision(actual);
-						actual = actual.siguiente(accion);
-						for (int i = 0; i < agentes.length; i++) {
-							agentes[i].movimiento(accion, actual);
-						}
-						movimientos.add(accion);
-						return accion;
+			for (Agente agente : agentes) {
+				Movimiento[] movs = actual.movimientos(agente.jugador());
+				// Supone un solo agente habilitado por vez.
+				if (movs != null && movs.length > 0) {
+					Movimiento accion = agente.decision(actual);
+					actual = actual.siguiente(accion);
+					for (int i = 0; i < agentes.length; i++) {
+						agentes[i].movimiento(accion, actual);
 					}
+					movimientos.add(accion);
+					return accion;
 				}
 			}
 			resultados = new double[agentes.length];

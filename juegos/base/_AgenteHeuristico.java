@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import juegos.Reversi.Reversi.EstadoReversi.MovimientoReversi;
+
 
 public abstract class _AgenteHeuristico implements Agente{
 
@@ -79,7 +81,7 @@ public abstract class _AgenteHeuristico implements Agente{
 		//Si es un estado final se devuelve el mayor valor para esta heurística posible
 		if(estado.esFinal())
 		{
-			return maximoValorHeuristica();
+			return darValorFinal(estado);
 		}
 		
 		Estado estadoAux = estado.copiar();
@@ -131,7 +133,10 @@ public abstract class _AgenteHeuristico implements Agente{
 		}
 	}
 	
-	public abstract double maximoValorHeuristica();
+	public double darValorFinal(Estado unEstado)
+	{
+		return unEstado.resultado(this.jugador())*100;
+	}
 
 	private Jugador obtenerJugador(Jugador[] jugadores, int jugador) {
 		return jugadores[jugador];
@@ -165,6 +170,10 @@ public abstract class _AgenteHeuristico implements Agente{
 	@Override
 	public Movimiento decision(Estado estado){
 		Movimiento[] movs = estado.movimientos(jugador());
+		
+		if(movs.length == 1)
+			return movs[0];
+		
 		int indiceJugador = obtenerJugador(estado.jugadores(), jugador());
 		
 		return miniMax(estado,movs,niveles(),indiceJugador);

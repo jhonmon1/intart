@@ -3,6 +3,7 @@ package juegos.Reversi;
 import java.util.ArrayList;
 import java.util.List;
 
+import juegos.Reversi.Reversi.EstadoReversi;
 import juegos.Reversi.Reversi.EstadoReversi.MovimientoReversi;
 import juegos.base.*;
 

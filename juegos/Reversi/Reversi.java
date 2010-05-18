@@ -114,6 +114,11 @@ public class Reversi extends _Juego {
 		 */
 		@Override
 		public Estado siguiente(Movimiento movimiento) {
+			if(((MovimientoReversi)movimiento).newFila == -1) {
+				tablero.actualizarTablero(null);
+				return new EstadoReversi(tablero);
+			}
+			
 			tablero.actualizarTablero(movimiento);
 			return new EstadoReversi(tablero);
 		}
@@ -126,8 +131,12 @@ public class Reversi extends _Juego {
 		 */
 		@Override
 		public Movimiento[] movimientos(Jugador jugador) {
-			
-			int jugadorMover = gatIndice(jugadores, jugador); 
+			return movimientos(jugador, jugadores);
+		}
+
+		private Movimiento[] movimientos(Jugador jugador, Jugador[] listaJugadores) 
+		{
+			int jugadorMover = getIndice(jugadores, jugador); 
 			
 			if(tablero.getJugadorActual() != jugadorMover)
 			{
@@ -180,15 +189,44 @@ public class Reversi extends _Juego {
 				}
 			}
 
-			// En caso de no haber movimientos actualiza el tablero cambiando el jugador 
-			// actual al siguiente y retorna null
-			if (listaMovs.size() == 0) {
-				tablero.actualizarTablero(null);
-				return null;
-			}
-
 			// Construye el vector de movimientos.
 			Movimiento[] movs = new Movimiento[listaMovs.size()];
+			
+			// En caso de no haber movimientos hacemos lo siguiente:
+			// Para todos los jugadores sin ser el actual, si nadie tiene movimientos retorno null 
+			// dado que la partida terminó, sinó alguien tiene movimientos y retorno el movimiento de paso.
+			// El movimiento PASAR que tiene como casillas la -1 -1
+			if (listaMovs.size() == 0) {
+				Jugador[] jugadoresAux = new Jugador[listaJugadores.length - 1];
+				int i = 0;
+				for (Jugador jugador2 : listaJugadores) 
+				{
+					if(!jugador2.equals(jugador))
+					{
+						jugadoresAux[i] = jugador2;
+						i++;
+					}
+				}
+				
+				boolean nadieMueve = true;
+				Movimiento[] lista;
+				for (Jugador jugador2 : jugadoresAux) {
+					lista = movimientos(jugador2, jugadoresAux);
+					 if(lista != null)
+						 nadieMueve = false;
+				}
+				if(nadieMueve)
+				{
+					return null;
+				}
+				//tablero.actualizarTablero(null);
+				movs = new Movimiento[1];
+				movs[0] = new MovimientoReversi(-1, -1, jugador, null);
+				
+				return movs;
+			}
+
+			
 			int count = 0;
 
 			for (Movimiento movimiento : listaMovs) {
@@ -207,7 +245,7 @@ public class Reversi extends _Juego {
 		 * el indice de la posicion del jugador en esa lista o -1 en caso
 		 * de no pertencer a la lista
 		 */
-		private int gatIndice(Jugador[] jugadores, Jugador jugador) {
+		private int getIndice(Jugador[] jugadores, Jugador jugador) {
 			int indice = 0;
 			for(Jugador unJugador : jugadores)
 			{
@@ -260,7 +298,7 @@ public class Reversi extends _Juego {
 		}
 
 		/**
-		 * Verificamos si el estado es un estado final.
+		 * Verificamos si el estado es un tablero final.
 		 * 
 		 * @return true si ningun jugador tiene movimientos, false si para algun
 		 *         jugador existe al menos un movimiento.
@@ -535,7 +573,10 @@ public class Reversi extends _Juego {
 			 */
 			@Override
 			public String toString() {
-				return COLUMNAS[newColumna] + FILAS[newFila];
+				if(newColumna != -1)
+					return COLUMNAS[newColumna] + FILAS[newFila];
+				
+				return "PASA";
 			}
 		}
 
@@ -551,9 +592,10 @@ public class Reversi extends _Juego {
 	}
 
 	public static void main(String[] args) throws Exception {
-		AgenteHeuristicoBasico agenteHB = new AgenteHeuristicoBasico(5, System.out);
-		AgenteHeuristicoDificil agenteHD = new AgenteHeuristicoDificil(5);
+		AgenteHeuristicoBasico agenteHB = new AgenteHeuristicoBasico(2, System.out);
+		AgenteHeuristicoBasico agenteHB2 = new AgenteHeuristicoBasico(3, System.out);
+		//AgenteHeuristicoDificil agenteHD = new AgenteHeuristicoDificil(5);
 		
-		System.out.println(Partida.completa(Reversi.JUEGO, agenteHB, agenteHD).toString());
+		System.out.println(Partida.completa(Reversi.JUEGO, agenteHB, agenteHB2).toString());
 	}
 }
