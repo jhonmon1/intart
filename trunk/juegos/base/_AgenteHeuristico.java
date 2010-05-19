@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import juegos.Reversi.Reversi;
+import juegos.Reversi.Reversi.EstadoReversi;
 import juegos.Reversi.Reversi.EstadoReversi.MovimientoReversi;
 
 
@@ -169,13 +171,19 @@ public abstract class _AgenteHeuristico implements Agente{
 
 	@Override
 	public Movimiento decision(Estado estado){
-		Movimiento[] movs = estado.movimientos(jugador());
-		
-		if(movs.length == 1)
-			return movs[0];
-		
-		int indiceJugador = obtenerJugador(estado.jugadores(), jugador());
-		
-		return miniMax(estado,movs,niveles(),indiceJugador);
+		if(((EstadoReversi)estado).huboUnPaso){
+			
+			return new MovimientoReversi(-1,-1,null,null);
+		}
+			
+			Movimiento[] movs = estado.movimientos(jugador());
+			
+			
+			if(movs.length == 1)
+				return movs[0];
+			
+			int indiceJugador = obtenerJugador(estado.jugadores(), jugador());
+			
+			return miniMax(estado,movs,niveles(),indiceJugador);
 	}
 }
