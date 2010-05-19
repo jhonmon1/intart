@@ -37,7 +37,7 @@ public class Reversi extends _Juego {
 		tablero.setCasilla(4, 3, 'N');
 		tablero.setCasilla(4, 4, 'B');
 		
-		return new EstadoReversi(tablero);
+		return new EstadoReversi(tablero, false);
 	}
 
 	/**
@@ -79,9 +79,12 @@ public class Reversi extends _Juego {
 	public class EstadoReversi implements Estado {
 
 		public final Tablero tablero;
+		public boolean huboUnPaso;
 
-		public EstadoReversi(Tablero tablero) {			
+
+		public EstadoReversi(Tablero tablero, boolean huboUnPaso) {			
 			this.tablero = tablero;
+			this.huboUnPaso = huboUnPaso;
 		}
 
 		public Tablero getTablero()
@@ -116,11 +119,11 @@ public class Reversi extends _Juego {
 		public Estado siguiente(Movimiento movimiento) {
 			if(((MovimientoReversi)movimiento).newFila == -1) {
 				tablero.actualizarTablero(null);
-				return new EstadoReversi(tablero);
+				return new EstadoReversi(tablero, huboUnPaso);
 			}
 			
 			tablero.actualizarTablero(movimiento);
-			return new EstadoReversi(tablero);
+			return new EstadoReversi(tablero, huboUnPaso);
 		}
 
 		/**
@@ -192,41 +195,23 @@ public class Reversi extends _Juego {
 			// Construye el vector de movimientos.
 			Movimiento[] movs = new Movimiento[listaMovs.size()];
 			
-			// En caso de no haber movimientos hacemos lo siguiente:
-			// Para todos los jugadores sin ser el actual, si nadie tiene movimientos retorno null 
-			// dado que la partida terminó, sinó alguien tiene movimientos y retorno el movimiento de paso.
-			// El movimiento PASAR que tiene como casillas la -1 -1
+			//Controlamos la variable huboPaso para verificar si el jugador
+			//anterior hizo un pasaje, en caso de haberlo hecho, se debera terminar
+			//la partida, en otro caso retornamos el movimiento de paso
 			if (listaMovs.size() == 0) {
-				Jugador[] jugadoresAux = new Jugador[listaJugadores.length - 1];
-				int i = 0;
-				for (Jugador jugador2 : listaJugadores) 
-				{
-					if(!jugador2.equals(jugador))
-					{
-						jugadoresAux[i] = jugador2;
-						i++;
-					}
-				}
-				
-				boolean nadieMueve = true;
-				Movimiento[] lista;
-				for (Jugador jugador2 : jugadoresAux) {
-					lista = movimientos(jugador2, jugadoresAux);
-					 if(lista != null)
-						 nadieMueve = false;
-				}
-				if(nadieMueve)
+				if(huboUnPaso)
 				{
 					return null;
 				}
-				//tablero.actualizarTablero(null);
-				movs = new Movimiento[1];
-				movs[0] = new MovimientoReversi(-1, -1, jugador, null);
-				
-				return movs;
+				else
+				{
+					huboUnPaso = true;
+					Movimiento movimiento = new MovimientoReversi(-1, -1, jugador, null);
+					Movimiento[] lista = {movimiento};
+					return lista;
+				} 
 			}
 
-			
 			int count = 0;
 
 			for (Movimiento movimiento : listaMovs) {
@@ -587,7 +572,7 @@ public class Reversi extends _Juego {
 
 		@Override
 		public Estado copiar() {
-			return (new EstadoReversi(tablero.copiar()));
+			return (new EstadoReversi(tablero.copiar(), huboUnPaso));
 		}
 	}
 
