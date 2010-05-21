@@ -73,8 +73,8 @@ public abstract class _AgenteHeuristico implements Agente{
 	 * @param jugadorMaximiza
 	 * @return
 	 */
-	public double alfaBeta(Estado estado, double alfa, double beta, int niveles, int jugador, int jugadorMaximiza)
-	{
+	public double alfaBeta(Estado estado, double alfa, double beta, int niveles, int jugador, int jugadorMaximiza){
+		
 		if(niveles == 0)
 		{
 			return darHeuristica(estado);
@@ -95,6 +95,7 @@ public abstract class _AgenteHeuristico implements Agente{
 		//El jugador actual es el que maximiza
 		if(jugador == jugadorMaximiza) {
 			if(movimientos != null){
+			//if(movimientos.length != 1 || (movimientos.length == 1 && ((MovimientoReversi)movimientos[0]).newColumna != -1)){
 				for(Movimiento movimiento : movimientos)
 				{
 					estadoAux = estado.copiar();
@@ -110,12 +111,14 @@ public abstract class _AgenteHeuristico implements Agente{
 				}
 				return alfa; // Mejor movimiento para el jugador actual
 			}
-			
+
 			return alfaBeta(estadoAux,alfa,beta,niveles,cambiar(jugador),jugadorMaximiza);
 
-		  //El jugador actual es el que minimiza
+					
+		//El jugador actual es el que minimiza
 		} else {
 			if(movimientos != null){
+			//if(movimientos.length != 1 || (movimientos.length == 1 && ((MovimientoReversi)movimientos[0]).newColumna != -1)){
 				for(Movimiento movimiento : movimientos) {
 					estadoAux = estado.copiar();
 					double valor = alfaBeta(estadoAux.siguiente(movimiento), 
@@ -171,19 +174,14 @@ public abstract class _AgenteHeuristico implements Agente{
 
 	@Override
 	public Movimiento decision(Estado estado){
-		if(((EstadoReversi)estado).huboUnPaso){
-			
-			return new MovimientoReversi(-1,-1,null,null);
-		}
-			
-			Movimiento[] movs = estado.movimientos(jugador());
-			
-			
-			if(movs.length == 1)
-				return movs[0];
-			
-			int indiceJugador = obtenerJugador(estado.jugadores(), jugador());
-			
-			return miniMax(estado,movs,niveles(),indiceJugador);
+		
+		Movimiento[] movs = estado.movimientos(jugador());
+				
+		if(movs.length == 1)
+			return movs[0];
+		
+		int indiceJugador = obtenerJugador(estado.jugadores(), jugador());
+		
+		return miniMax(estado,movs,niveles(),indiceJugador);
 	}
 }
