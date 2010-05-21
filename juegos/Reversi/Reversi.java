@@ -37,7 +37,7 @@ public class Reversi extends _Juego {
 		tablero.setCasilla(4, 3, 'N');
 		tablero.setCasilla(4, 4, 'B');
 		
-		return new EstadoReversi(tablero, false);
+		return new EstadoReversi(tablero, 0);
 	}
 
 	/**
@@ -79,12 +79,22 @@ public class Reversi extends _Juego {
 	public class EstadoReversi implements Estado {
 
 		public final Tablero tablero;
-		public boolean huboUnPaso;
+		int contador;
+
+		private boolean gethuboUnPaso() {
+			if(contador == 2)
+			{
+				return true;	
+			}
+			contador++;
+			return false;
+		}
 
 
-		public EstadoReversi(Tablero tablero, boolean huboUnPaso) {			
+
+		public EstadoReversi(Tablero tablero, int contador) {			
 			this.tablero = tablero;
-			this.huboUnPaso = huboUnPaso;
+			this.contador = contador;
 		}
 
 		public Tablero getTablero()
@@ -119,11 +129,11 @@ public class Reversi extends _Juego {
 		public Estado siguiente(Movimiento movimiento) {
 			if(((MovimientoReversi)movimiento).newFila == -1) {
 				tablero.actualizarTablero(null);
-				return new EstadoReversi(tablero, huboUnPaso);
+				return new EstadoReversi(tablero, contador);
 			}
 			
 			tablero.actualizarTablero(movimiento);
-			return new EstadoReversi(tablero, huboUnPaso);
+			return new EstadoReversi(tablero, contador);
 		}
 
 		/**
@@ -199,13 +209,12 @@ public class Reversi extends _Juego {
 			//anterior hizo un pasaje, en caso de haberlo hecho, se debera terminar
 			//la partida, en otro caso retornamos el movimiento de paso
 			if (listaMovs.size() == 0) {
-				if(huboUnPaso)
+				if(gethuboUnPaso())
 				{
 					return null;
 				}
 				else
 				{
-					huboUnPaso = true;
 					Movimiento movimiento = new MovimientoReversi(-1, -1, jugador, null);
 					Movimiento[] lista = {movimiento};
 					return lista;
@@ -224,6 +233,7 @@ public class Reversi extends _Juego {
 			
 			return movs;
 		}
+
 
 		/*
 		 * Dada la lista de jugadores y un jugador particular devuelve
@@ -572,7 +582,7 @@ public class Reversi extends _Juego {
 
 		@Override
 		public Estado copiar() {
-			return (new EstadoReversi(tablero.copiar(), huboUnPaso));
+			return (new EstadoReversi(tablero.copiar(), contador));
 		}
 	}
 
